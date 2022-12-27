@@ -1,0 +1,17 @@
+[package]
+name = "trerobinson/quirkymalsgame"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+Roact = "roblox/roact@1.4.4"
+Rodux = "roblox/rodux@4.0.0-rc.0"
+RoactRodux = "roblox/roact-rodux@0.5.1"
+RoactHooks = "kampfkarren/roact-hooks@0.5.0"
+RoactSpring = "chriscerie/roact-spring@1.1.1"
+
+BasicState = "csqrl/basicstate@0.2.6"
+
+# Knit Stuff
+Knit = "sleitnick/knit@1.4.7"
