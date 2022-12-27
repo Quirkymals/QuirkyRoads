@@ -6,9 +6,8 @@ local RunService = game:GetService("RunService")
 --// Core Modules
 local Knit = require(ReplicatedStorage.Packages.Knit)
 
-Knit.Shared = ReplicatedStorage.Shared
 Knit.Modules = ReplicatedStorage.Modules
-Knit.Classes = ReplicatedStorage.Classes
+-- Knit.Classes = ReplicatedStorage.Classes
 
 --// Knit Stuff
 local Services = ServerScriptService.Services

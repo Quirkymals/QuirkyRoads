@@ -15,3 +15,6 @@ BasicState = "csqrl/basicstate@0.2.6"
 
 # Knit Stuff
 Knit = "sleitnick/knit@1.4.7"
+
+# Profile Service
+profileservice = "surnautica/profileservice@1.0.0"
