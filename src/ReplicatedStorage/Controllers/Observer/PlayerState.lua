@@ -43,9 +43,8 @@ local PlayerState = {}
 --// Knit
 local Knit = require(ReplicatedStorage.Packages.Knit)
 
-function PlayerState:init()
-    
-end
+function PlayerState:observe() end
 
+function PlayerState:init() end
 
 return PlayerState

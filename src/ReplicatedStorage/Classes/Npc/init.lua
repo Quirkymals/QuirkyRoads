@@ -35,8 +35,7 @@ API
 -- Implementation of Npc.
 
 --// Services
-local ReplicatedStorage = game:GetService('ReplicatedStorage')
-
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --// Basic State
 local BasicState = require(ReplicatedStorage.Packages.BasicState)
@@ -45,21 +44,15 @@ local BasicState = require(ReplicatedStorage.Packages.BasicState)
 local Npc = {}
 Npc.__index = Npc
 
-
 function Npc.new()
-    local info = {}
+	local info = {}
 
-    info.State = BasicState.new({
-        
-    })    
+	info.State = BasicState.new({})
 
-    setmetatable(info, Npc)
-    return info
+	setmetatable(info, Npc)
+	return info
 end
 
-function Npc:Init()
-    
-end
-
+function Npc:Init() end
 
 return Npc

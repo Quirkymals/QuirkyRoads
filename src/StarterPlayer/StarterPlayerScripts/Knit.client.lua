@@ -9,10 +9,8 @@ local Knit = require(ReplicatedStorage.Packages.Knit)
 local States = ReplicatedStorage.States
 
 Knit.Player = Players.LocalPlayer
--- Knit.Shared = ReplicatedStorage.Shared
--- Knit.Modules = ReplicatedStorage.Modules
--- Knit.Classes = ReplicatedStorage.Classes
-
+Knit.Modules = ReplicatedStorage.Modules
+Knit.Classes = ReplicatedStorage.Classes
 
 local function AddState(StateModule: ModuleScript | Folder)
 	if StateModule:IsA("Folder") then

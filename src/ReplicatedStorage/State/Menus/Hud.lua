@@ -4,8 +4,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 --// Basic State
 local BasicState = require(ReplicatedStorage.Packages.BasicState)
 
-local Player = BasicState.new({
-	Exp = 0,
+local Hud = BasicState.new({
+	Index = nil,
 })
 
-return Player
+return Hud
