@@ -41,10 +41,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Prediction = {}
 
 function Prediction.Part(Part: Part)
-    local CF = Part.CFrame
-    local Direction = Part.CFrame.LookVector
-    local Velocity = Part.AssemblyLinearVelocity
+	local CF = Part.CFrame
+	local Direction = Part.CFrame.LookVector
+	local Velocity = Part.AssemblyLinearVelocity
 end
-
 
 return Prediction

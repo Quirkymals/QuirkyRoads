@@ -40,14 +40,14 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 --// module
 local SpaceSearch = {}
 
-
 function SpaceSearch.FindNearestPlayer(Player: Player)
-    if not Player.Character then return end
+	if not Player.Character then
+		return
+	end
 
-    for _, Player in pairs do
-        -- if pla
-    end
+	for _, Player in pairs do
+		-- if pla
+	end
 end
-
 
 return SpaceSearch

@@ -51,10 +51,8 @@ function EntityCompressor.new()
 end
 
 function EntityCompressor:compress(entity)
-
 	local data = {}
 
-	
 	data.x = entity.Position.X
 	data.y = entity.Position.Y
 	data.z = entity.Position.Z

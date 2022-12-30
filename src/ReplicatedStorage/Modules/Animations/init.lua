@@ -1,12 +1,12 @@
 --[[
-Hoverboard
+Animations
 
     A short description of the module.
 
 SYNOPSIS
 
     -- Lua code that showcases an overview of the API.
-    local foobar = Hoverboard.TopLevel('foo')
+    local foobar = Animations.TopLevel('foo')
     print(foobar.Thing)
 
 DESCRIPTION
@@ -32,25 +32,14 @@ API
     }
 ]]
 
--- Implementation of Hoverboard.
+-- Implementation of Animations.
 
 --// Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
---// Class
-local Hoverboard = {}
-Hoverboard.__index = Hoverboard
+--// module
+local Animations = {}
 
-function Hoverboard.new(Character, Base: Part)
-	local info = {
-		Character = Character,
-		Base = Base,
-	}
+function Animations.new() end
 
-	setmetatable(info, Hoverboard)
-	return info
-end
-
-function Hoverboard:Init() end
-
-return Hoverboard
+return Animations

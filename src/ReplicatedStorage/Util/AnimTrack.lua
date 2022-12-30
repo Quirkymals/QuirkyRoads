@@ -45,53 +45,46 @@ AnimTrack.__index = AnimTrack
 local AnimationPrefix = "rbxassetid://"
 
 function AnimTrack.new(Animator: Animator, Animation: Animation | string)
-    
-    local CurrentAnimation: Animation
-    local CurrentAnimationTrack: AnimationTrack
-    local Created = false
+	local CurrentAnimation: Animation
+	local CurrentAnimationTrack: AnimationTrack
+	local Created = false
 
-    if Animation:IsA'Animation' then
-        CurrentAnimation = Animation
-    else
-        Created = true
-        if tonumber(CurrentAnimation) then
-            CurrentAnimation = Instance.new("Animation")
-            CurrentAnimation.AnimationId = AnimationPrefix..CurrentAnimation
-        else
-            CurrentAnimation = Instance.new("Animation")
-            CurrentAnimation.AnimationId = CurrentAnimation
-        end
-    end
+	if Animation:IsA("Animation") then
+		CurrentAnimation = Animation
+	else
+		Created = true
+		if tonumber(CurrentAnimation) then
+			CurrentAnimation = Instance.new("Animation")
+			CurrentAnimation.AnimationId = AnimationPrefix .. CurrentAnimation
+		else
+			CurrentAnimation = Instance.new("Animation")
+			CurrentAnimation.AnimationId = CurrentAnimation
+		end
+	end
 
-    CurrentAnimationTrack = Animator:LoadAnimation(CurrentAnimation)
+	CurrentAnimationTrack = Animator:LoadAnimation(CurrentAnimation)
 
-    CurrentAnimationTrack.Stopped:Connect(function()
-        CurrentAnimation:Destroy()
-    end)
+	CurrentAnimationTrack.Stopped:Connect(function()
+		CurrentAnimation:Destroy()
+	end)
 
-    function CurrentAnimationTrack:PlayOnce(fadeTime: number, weight: number, Speed: number)
-        local AnimationTime = CurrentAnimationTrack.Length
-        local AnimationSpeed = Speed or CurrentAnimationTrack.Speed
+	function CurrentAnimationTrack:PlayOnce(fadeTime: number, weight: number, Speed: number)
+		local AnimationTime = CurrentAnimationTrack.Length
+		local AnimationSpeed = Speed or CurrentAnimationTrack.Speed
 
-        local MaxTime = AnimationTime/AnimationSpeed
-        local StopTime = MaxTime*.995
+		local MaxTime = AnimationTime / AnimationSpeed
+		local StopTime = MaxTime * 0.995
 
-        CurrentAnimationTrack:Play(fadeTime, weight, Speed)
+		CurrentAnimationTrack:Play(fadeTime, weight, Speed)
 
-        
+		task.wait(MaxTime)
 
-        task.wait(MaxTime)
+		CurrentAnimationTrack:Stop()
+	end
 
-        CurrentAnimationTrack:Stop()
-        
-    end
-
-    return CurrentAnimationTrack
+	return CurrentAnimationTrack
 end
 
-function AnimTrack.SyncPlay()
-    
-end
-
+function AnimTrack.SyncPlay() end
 
 return AnimTrack

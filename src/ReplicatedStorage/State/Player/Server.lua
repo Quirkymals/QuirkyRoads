@@ -37,22 +37,30 @@ API
 --// Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+--// Basic State
+local BasicState = require(ReplicatedStorage.Packages.BasicState)
+
 --// Class
 local ServerPlayerState = {}
-ServerPlayerState.__index = ServerPlayerState
 
+function ServerPlayerState.new(Player: Player)
+	local Config = Instance.new("Configuration", Player)
 
-function ServerPlayerState.new()
-    
-    local info = {}
+	local PlayerState = BasicState.new({
 
-    setmetatable(info, ServerPlayerState)
-    return info
+		Player = Player,
+		Character = Player.Character,
+
+		Config = Config,
+
+		Animal = "",
+        Animations = ""
+	})
+
+	Player.CharacterAdded:Connect(function(character)
+		PlayerState:Set("Character", character)
+	end)
+	return PlayerState
 end
-
-function ServerPlayerState:Init()
-    
-end
-
 
 return ServerPlayerState

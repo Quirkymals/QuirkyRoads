@@ -44,13 +44,13 @@ local Knit = require(ReplicatedStorage.Packages.Knit)
 local PersonalMessage = {}
 
 function PersonalMessage.new(Author: Player, Recipient: Player, Message: string)
-	local RequestService = Knit.GetService("RequestService")
-	RequestService.PersonalMessage:Fire(Recipient, Author, Message)
+	local NetworkService = Knit.GetService("NetworkService")
+	NetworkService.PersonalMessage:Fire(Recipient, Author, Message)
 end
 
 function PersonalMessage.Objected(Recipient: Player, Author: Player, Message: string)
-	local RequestService = Knit.GetService("RequestService")
-	RequestService.PersonalMessageObjected:Fire(Author, Recipient, Message)
+	local NetworkService = Knit.GetService("NetworkService")
+	NetworkService.PersonalMessageObjected:Fire(Author, Recipient, Message)
 end
 
 return PersonalMessage

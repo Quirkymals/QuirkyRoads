@@ -70,4 +70,4 @@ dependencies = []
 [[package]]
 name = "trerobinson/quirkymalsgame"
 version = "0.1.0"
-dependencies = [["BasicState", "csqrl/basicstate@0.2.6"], ["Knit", "sleitnick/knit@1.4.7"], ["Roact", "roblox/roact@1.4.4"], ["RoactHooks", "kampfkarren/roact-hooks@0.5.0"], ["RoactRodux", "roblox/roact-rodux@0.5.1"], ["RoactSpring", "chriscerie/roact-spring@1.1.2"], ["Rodux", "roblox/rodux@4.0.0-rc.0"], ["profileservice", "surnautica/profileservice@1.0.0"]]
+dependencies = [["BasicState", "csqrl/basicstate@0.2.6"], ["Knit", "sleitnick/knit@1.4.7"], ["ProfileService", "surnautica/profileservice@1.0.0"], ["Roact", "roblox/roact@1.4.4"], ["RoactHooks", "kampfkarren/roact-hooks@0.5.0"], ["RoactRodux", "roblox/roact-rodux@0.5.1"], ["RoactSpring", "chriscerie/roact-spring@1.1.2"], ["Rodux", "roblox/rodux@4.0.0-rc.0"]]

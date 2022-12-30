@@ -1,12 +1,12 @@
 --[[
-Hoverboard
+CharacterManager
 
     A short description of the module.
 
 SYNOPSIS
 
     -- Lua code that showcases an overview of the API.
-    local foobar = Hoverboard.TopLevel('foo')
+    local foobar = CharacterManager.TopLevel('foo')
     print(foobar.Thing)
 
 DESCRIPTION
@@ -32,25 +32,22 @@ API
     }
 ]]
 
--- Implementation of Hoverboard.
+-- Implementation of CharacterManager.
 
 --// Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
---// Class
-local Hoverboard = {}
-Hoverboard.__index = Hoverboard
+--// Module
+local CharacterManager = {}
 
-function Hoverboard.new(Character, Base: Part)
-	local info = {
-		Character = Character,
-		Base = Base,
-	}
+--// Spawns
+local Spawns = workspace.Spawns or warn("No 'Spawns' folder in workspace")
 
-	setmetatable(info, Hoverboard)
-	return info
+function CharacterManager.Spawn(Model: Model) 
+    local Spawn: SpawnLocation = Spawns:GetChildren()[math.random(1, #Spawns:GetChildren())]
+    Model:PivotTo(Spawn.CFrame * CFrame.new(0, 5.5, 0))
+
+    Model.Parent = workspace:WaitForChild('Players')
 end
 
-function Hoverboard:Init() end
-
-return Hoverboard
+return CharacterManager

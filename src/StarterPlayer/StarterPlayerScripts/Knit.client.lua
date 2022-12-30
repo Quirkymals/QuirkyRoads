@@ -6,13 +6,17 @@ local StarterGui = game:GetService("StarterGui")
 local Knit = require(ReplicatedStorage.Packages.Knit)
 
 --// Systems
-local States = ReplicatedStorage.States
+local States = ReplicatedStorage.State
 
 Knit.Player = Players.LocalPlayer
 Knit.Modules = ReplicatedStorage.Modules
 Knit.Classes = ReplicatedStorage.Classes
 
 local function AddState(StateModule: ModuleScript | Folder)
+	if StateModule.Name:lower():find("server") then
+		return
+	end
+
 	if StateModule:IsA("Folder") then
 		for _, v in StateModule:GetChildren() do
 			AddState(v)

@@ -13,8 +13,8 @@ local Trade = require(script.Trade)
 local Knit = require(ReplicatedStorage.Packages.Knit)
 
 --// Service
-local RequestService = Knit.CreateService({
-	Name = "RequestService",
+local NetworkService = Knit.CreateService({
+	Name = "NetworkService",
 	Client = {
 		Invite = Knit.CreateSignal(),
 
@@ -44,11 +44,11 @@ local RequestService = Knit.CreateService({
 	},
 })
 
-function RequestService:KnitInit()
+function NetworkService:KnitInit()
 	Players.PlayerAdded:Connect(CrossServer.PlayerAdded)
 end
 
-function RequestService:KnitStart()
+function NetworkService:KnitStart()
 	-------------Variables-----------
 	local Signals = self.Client
 
@@ -76,4 +76,4 @@ function RequestService:KnitStart()
 	-----------Initialize------------
 end
 
-return RequestService
+return NetworkService

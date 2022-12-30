@@ -75,7 +75,7 @@ local function AuthenticateRequest(Creator: Player, Recipient: Player)
 end
 
 function FriendRequest.new(Creator: Player, Recipient: Player): FriendRequest | nil
-	local RequestService = Knit.GetService("RequestService")
+	local NetworkService = Knit.GetService("NetworkService")
 
 	local OwnerIsFriendsWithRecipient: boolean, WarnMessage: string = AuthenticateRequest(Creator, Recipient)
 	local RecipientName = (Recipient.DisplayName or Recipient.Name)
@@ -88,21 +88,21 @@ function FriendRequest.new(Creator: Player, Recipient: Player): FriendRequest | 
 	}
 
 	if FriendRequest[self.key] then
-		RequestService.Client.ObjectFriendRequest:Fire(
+		NetworkService.Client.ObjectFriendRequest:Fire(
 			Creator,
 			"You already sent " .. RecipientName .. " a friend request."
 		)
 		return nil
 	elseif FriendRequest[ReverseKey] then
-		RequestService.Client.ObjectFriendRequest:Fire(Creator, RecipientName .. " already sent you a friend request")
+		NetworkService.Client.ObjectFriendRequest:Fire(Creator, RecipientName .. " already sent you a friend request")
 		return nil
 	elseif OwnerIsFriendsWithRecipient then
-		RequestService.Client.ObjectFriendRequest:Fire(Creator, "You are already friends with" .. RecipientName)
+		NetworkService.Client.ObjectFriendRequest:Fire(Creator, "You are already friends with" .. RecipientName)
 		return nil
 	end
 
 	FriendRequest[self.key] = self
-	RequestService.Client.RecievedFriendRequest:Fire(
+	NetworkService.Client.RecievedFriendRequest:Fire(
 		Recipient,
 		(Creator.DisplayName or Creator.Name) .. " sent you a friend request!"
 	)

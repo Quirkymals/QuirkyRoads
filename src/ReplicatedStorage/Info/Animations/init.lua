@@ -39,16 +39,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --// Animations.
 local Animation = {
-    Cat = require(script.Cat),
-    Chick = require(script.Chick),
-    Dog = require(script.Dog),
-    Dove = require(script.Dove),
+	Cat = require(script.Cat),
+	Chick = require(script.Chick),
+	Dog = require(script.Dog),
+	Dove = require(script.Dove),
 }
 
-
-function Animation.findById(string)
-    
-end
-
+function Animation.findById(string) end
 
 return Animation

@@ -7,18 +7,21 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Knit = require(ReplicatedStorage.Packages.Knit)
 
 --// Controller
-local Observer = Knit.CreateController({ Name = "Observer" })
+local PlayerController = Knit.CreateController({ Name = "PlayerController" })
 
 --// Variables
-function Observer:KnitInit() end
+function PlayerController:KnitInit() end
 
-function Observer:KnitStart()
+function PlayerController:KnitStart()
 	-------------Variables-----------
-	-- local StateManager = script:GetChildren()
+
 	-------------Variables-----------
+	-------------Classes-------------
+
+	-------------Classes-------------
 	-----------Initialize------------
 
 	-----------Initialize------------
 end
 
-return Observer
+return PlayerController

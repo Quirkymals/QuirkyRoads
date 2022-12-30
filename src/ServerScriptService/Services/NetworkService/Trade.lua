@@ -110,11 +110,11 @@ Players.PlayerRemoving:Connect(FindPlayerInTrade)
 
 --// CREATE
 function Trade.new(key: Player, Recipient: Player): Trade | nil
-	local RequestService = Knit.GetService("RequestService")
+	local NetworkService = Knit.GetService("NetworkService")
 	local AuthenticationFailed, WarnMessage = AuthenticateTrade(key, Recipient)
 
 	if AuthenticationFailed then
-		RequestService.Client.ObjectTrade:Fire(key, WarnMessage)
+		NetworkService.Client.ObjectTrade:Fire(key, WarnMessage)
 		return nil
 	end
 
