@@ -51,17 +51,20 @@ function EntityCompressor.new()
 end
 
 function EntityCompressor:compress(entity)
+
 	local data = {}
+
+	
 	data.x = entity.Position.X
 	data.y = entity.Position.Y
 	data.z = entity.Position.Z
-	data.vx = entity.Velocity.X
-	data.vy = entity.Velocity.Y
-	data.vz = entity.Velocity.Z
-	data.rx = entity.Rotation.X
-	data.ry = entity.Rotation.Y
-	data.rz = entity.Rotation.Z
-	data.rw = entity.Rotation.W
+	data.vx = entity.LinearVelocity.X
+	data.vy = entity.LinearVelocity.Y
+	data.vz = entity.LinearVelocity.Z
+	data.rx = entity.Orientation.X
+	data.ry = entity.Orientation.Y
+	data.rz = entity.Orientation.Z
+	-- data.rw = entity.Rotation.W
 	data.animation = entity.Animation
 	return data
 end
@@ -70,7 +73,7 @@ function EntityCompressor:decompress(data)
 	local entity = {}
 	entity.Position = Vector3.new(data.x, data.y, data.z)
 	entity.Velocity = Vector3.new(data.vx, data.vy, data.vz)
-	entity.Rotation = Quaternion.new(data.rx, data.ry, data.rz, data.rw)
+	-- entity.Rotation = Quaternion.new(data.rx, data.ry, data.rz, data.rw)
 	entity.Animation = data.animation
 	return entity
 end

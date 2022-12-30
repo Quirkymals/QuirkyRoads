@@ -1,0 +1,15 @@
+return {
+    Boucne = "",
+    Clicked = "",
+    Death = "",
+    Eat = "",
+    Fall = "",
+    Fear = "",
+    Idle = "",
+    Jump = "",
+    Roll = "",
+    Run = "",
+    Spin = "",
+    Swim = "",
+    Walk = "",
+}

@@ -1,7 +1,9 @@
 --// Services
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --// Modules
+-- What Im thinking of doing, is getting the animation tracks of near
 
 --// Knit
 local Knit = require(ReplicatedStorage.Packages.Knit)
@@ -12,7 +14,12 @@ local PlayerService = Knit.CreateService({
 	Client = {},
 })
 
-function PlayerService:KnitInit() end
+function PlayerService:KnitInit() 
+	local CharactersFolder = Instance.new('Folder')
+	CharactersFolder.Name = "Players"
+
+	self.CharactersFolder = CharactersFolder
+end
 
 function PlayerService:KnitStart()
 	-------------Variables-----------
@@ -22,7 +29,9 @@ function PlayerService:KnitStart()
 
 	-------------Classes-------------
 	-----------Initialize------------
-
+	Players.PlayerAdded:Connect(function(player)
+		
+	end)
 	-----------Initialize------------
 end
 
