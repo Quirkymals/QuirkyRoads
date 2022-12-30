@@ -13,6 +13,8 @@ Knit.Modules = ReplicatedStorage.Modules
 Knit.Classes = ReplicatedStorage.Classes
 
 local function AddState(StateModule: ModuleScript | Folder)
+	local Name = StateModule.Name == 'Client' and StateModule.Parent.Name..'State' or StateModule.Name
+	
 	if StateModule.Name:lower():find("server") then
 		return
 	end
@@ -25,15 +27,16 @@ local function AddState(StateModule: ModuleScript | Folder)
 		return
 	end
 
-	Knit[StateModule.Name] = require(StateModule)
+	Knit[Name] = require(StateModule)
 
-	if Knit[StateModule.Name].new and Knit[StateModule.Name].Init then
-		Knit[StateModule.Name] = Knit[StateModule.Name].new()
-		Knit[StateModule.Name]:Init()
+	if Knit[Name].new and Knit[Name].Init then
+		Knit[Name] = Knit[Name].new()
+		Knit[Name]:Init()
 	end
 end
 
 AddState(States)
+print(Knit)
 
 --// Adding Conrollers
 Knit.AddControllersDeep(ReplicatedStorage.Controllers)

@@ -110,9 +110,10 @@ function PlayerService:ListenToState(Player: Player)
 
 	local Character = StateMachine:Get("Character")
 
-	StateMachine:GetChangedSignal("Character"):Connect(function(NewCharacer)
+	StateMachine:GetChangedSignal("Character"):Connect(function(Character)
 		local Animal = StateMachine:Get('Animal')
-		local AnimationFolder = Animations:FindFirstChild(Animal)
+		CharacterManager.AddAnimations(Character, Animal)
+		CharacterManager.Died(StateMachine, Character, Animal)
 	end)
 
 	StateMachine:GetChangedSignal("Animal"):Connect(function(NewAnimal)

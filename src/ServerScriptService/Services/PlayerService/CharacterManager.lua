@@ -36,18 +36,60 @@ API
 
 --// Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerStorage = game:GetService("ServerStorage")
 
 --// Module
 local CharacterManager = {}
 
---// Spawns
+--// Variables
 local Spawns = workspace.Spawns or warn("No 'Spawns' folder in workspace")
+local Animations = ReplicatedStorage.Animations
 
 function CharacterManager.Spawn(Model: Model) 
     local Spawn: SpawnLocation = Spawns:GetChildren()[math.random(1, #Spawns:GetChildren())]
     Model:PivotTo(Spawn.CFrame * CFrame.new(0, 5.5, 0))
-
     Model.Parent = workspace:WaitForChild('Players')
+end
+
+function CharacterManager.AddAnimations(Character: Model, Animal: string)
+    local Animate: LocalScript = ServerStorage.Animate:Clone()
+    local AnimationFolder: Folder = Animations[Animal]
+    
+    local Anims = {}
+
+    Animate.Parent = Character
+    for _, Animation: string in pairs({'Run', 'Idle', 'Jump', 'Fall', 'Death'}) do
+        local CurrentAnimation: Animation = AnimationFolder:WaitForChild(Animation)
+        if Animation ~= "Idle" and Animation ~= "Death" then
+			Animate:FindFirstChild(string.lower(Animation))[Animation .. "Anim"].AnimationId = CurrentAnimation.AnimationId
+		elseif CurrentAnimation == "Idle" then
+			Animate.idle.Animation1.AnimationId = CurrentAnimation.AnimationId
+			Animate.idle.Animation2.AnimationId = CurrentAnimation.AnimationId
+		end
+    end
+
+    Animate.Enabled = true
+end
+
+function CharacterManager.Died(StateMachine, _Character, Animal)
+    local Player: Player = StateMachine:Get('Player')
+    local Humanoid:Humanoid = _Character:WaitForChild('Humanoid')
+    
+    
+    local Connection
+    
+    Connection = Humanoid.Died:Connect(function()
+        local Character: Model = ServerStorage:FindFirstChild(Animal):Clone()
+        Player.Character = Character
+
+        CharacterManager.Spawn(Character)
+        Connection:Disconnect()
+    end)
+
+
+    
+
+
 end
 
 return CharacterManager

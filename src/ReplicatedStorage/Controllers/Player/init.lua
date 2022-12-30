@@ -1,10 +1,11 @@
 --// Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
---// Modules
-
 --// Knit
 local Knit = require(ReplicatedStorage.Packages.Knit)
+
+--// State Machines
+local PlayerState = Knit.PlayerState
 
 --// Controller
 local PlayerController = Knit.CreateController({ Name = "PlayerController" })
@@ -14,7 +15,7 @@ function PlayerController:KnitInit() end
 
 function PlayerController:KnitStart()
 	-------------Variables-----------
-
+	print(PlayerState)
 	-------------Variables-----------
 	-------------Classes-------------
 
