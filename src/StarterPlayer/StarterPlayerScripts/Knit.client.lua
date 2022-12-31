@@ -13,8 +13,8 @@ Knit.Modules = ReplicatedStorage.Modules
 Knit.Classes = ReplicatedStorage.Classes
 
 local function AddState(StateModule: ModuleScript | Folder)
-	local Name = StateModule.Name == 'Client' and StateModule.Parent.Name..'State' or StateModule.Name
-	
+	local Name = StateModule.Name == "Client" and StateModule.Parent.Name .. "State" or StateModule.Name
+
 	if StateModule.Name:lower():find("server") then
 		return
 	end

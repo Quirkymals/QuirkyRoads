@@ -1,12 +1,12 @@
 --[[
-Animations
+Animation
 
     A short description of the module.
 
 SYNOPSIS
 
     -- Lua code that showcases an overview of the API.
-    local foobar = Animations.TopLevel('foo')
+    local foobar = Animation.TopLevel('foo')
     print(foobar.Thing)
 
 DESCRIPTION
@@ -32,14 +32,31 @@ API
     }
 ]]
 
--- Implementation of Animations.
+-- Implementation of Animation.
 
 --// Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+--// Variables
+local Animations = ReplicatedStorage.Animations
+
 --// module
-local Animations = {}
+local Animation = {}
 
-function Animations.new() end
 
-return Animations
+function Animation.GetAnimations(Animal, QueriedAnimation: string): Animation | Folder
+	local CurrentFolder = Animations[Animal]
+    
+	if QueriedAnimation then
+		local Animation = CurrentFolder:FindFirstChild(QueriedAnimation)
+		if not Animation then
+			return warn(QueriedAnimation .. " animation does not exist")
+		else
+			return Animation:Clone()
+		end
+	else
+		return CurrentFolder
+	end
+end
+
+return Animation

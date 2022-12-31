@@ -51,7 +51,7 @@ local function AddState(Player: Player)
 end
 
 local function RemoveState(Player: Player)
-	Knit.States[Player] = nil
+	Knit.States[Player]:Destroy()
 end
 
 local function GetPlayerState(Player)
@@ -108,20 +108,24 @@ function PlayerService:ListenToState(Player: Player)
 	local StateMachine = GetPlayerState(Player)
 	local Profile = self.DataService:GetData(Player)
 
-	local Character = StateMachine:Get("Character")
+	StateMachine:GetChangedSignal("Character"):Connect(function(Character: Model)
+		local Animal = StateMachine:Get("Animal")
 
-	StateMachine:GetChangedSignal("Character"):Connect(function(Character)
-		local Animal = StateMachine:Get('Animal')
 		CharacterManager.AddAnimations(Character, Animal)
 		CharacterManager.Died(StateMachine, Character, Animal)
+
+
+		Character.AncestryChanged:Wait()
+		PlayerService.Client.Spawned:FireAll(Player, Character, Animal)
 	end)
 
 	StateMachine:GetChangedSignal("Animal"):Connect(function(NewAnimal)
 		local Animal: Model = ServerStorage:FindFirstChild(NewAnimal):Clone()
 		Player.Character = Animal
+
 		CharacterManager.Spawn(Animal)
+
 	end)
-	
 end
 
 function PlayerService:AddInfoToState(Player)
@@ -129,7 +133,6 @@ function PlayerService:AddInfoToState(Player)
 	local Profile = self.DataService:GetData(Player)
 
 	local Animal = Profile["Animal"] or "Parrot"
-
 	StateMachine:Set("Animal", Animal)
 end
 

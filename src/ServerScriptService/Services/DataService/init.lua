@@ -57,7 +57,6 @@ local Profiles = {}
 --// Local Functions
 local function PlayerAdded(player)
 	local profile = ProfileStore:LoadProfileAsync("Player_" .. player.UserId)
-	print(profile)
 	if profile ~= nil then
 		profile:AddUserId(player.UserId) -- GDPR compliance
 		profile:Reconcile() -- Fill in missing variables from ProfileTemplate (optional)
@@ -95,7 +94,6 @@ function DataService:GetProfile(Player)
 		error('"Player" arg is nil')
 	end
 
-	print(Player)
 	repeat
 		task.wait()
 	until Profiles[Player] ~= nil

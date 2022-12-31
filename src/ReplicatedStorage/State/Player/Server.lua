@@ -54,12 +54,29 @@ function ServerPlayerState.new(Player: Player)
 		Config = Config,
 
 		Animal = "",
-        Animations = ""
+		Animations = "",
+
+        Connections = {}
 	})
 
-	Player.CharacterAdded:Connect(function(character)
+    function PlayerState:Disconnect()
+        for _, c: RBXScriptConnection in pairs(self.Connections) do
+            c:Disconnect()
+        end
+    end
+    
+    function PlayerState:Destroy()
+        self:Disconnect()
+    
+        setmetatable(self, nil)
+        table.clear(self)
+        table.freeze(self)
+    end
+
+	PlayerState:Set('Connections', Player.CharacterAdded:Connect(function(character)
 		PlayerState:Set("Character", character)
-	end)
+	end))
+
 	return PlayerState
 end
 
