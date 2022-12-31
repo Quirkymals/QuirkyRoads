@@ -46,6 +46,8 @@ local ServerPlayerState = {}
 function ServerPlayerState.new(Player: Player)
 	local Config = Instance.new("Configuration", Player)
 
+	local Connections = {}
+
 	local PlayerState = BasicState.new({
 
 		Player = Player,
@@ -56,26 +58,28 @@ function ServerPlayerState.new(Player: Player)
 		Animal = "",
 		Animations = "",
 
-        Connections = {}
+		Connections = {},
 	})
 
-    function PlayerState:Disconnect()
-        for _, c: RBXScriptConnection in pairs(self.Connections) do
-            c:Disconnect()
-        end
-    end
-    
-    function PlayerState:Destroy()
-        self:Disconnect()
-    
-        setmetatable(self, nil)
-        table.clear(self)
-        table.freeze(self)
-    end
+	function PlayerState:Disconnect()
+		for _, c: RBXScriptConnection in pairs(self.Connections) do
+			c:Disconnect()
+		end
+	end
 
-	PlayerState:Set('Connections', Player.CharacterAdded:Connect(function(character)
+	function PlayerState:Destroy()
+		self:Disconnect()
+
+		setmetatable(self, nil)
+		table.clear(self)
+		table.freeze(self)
+	end
+
+	Connections["CharacterAdded"] = Player.CharacterAdded:Connect(function(character)
 		PlayerState:Set("Character", character)
-	end))
+	end)
+
+	PlayerState:Set("Connections", Connections)
 
 	return PlayerState
 end

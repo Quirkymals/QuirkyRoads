@@ -114,7 +114,6 @@ function PlayerService:ListenToState(Player: Player)
 		CharacterManager.AddAnimations(Character, Animal)
 		CharacterManager.Died(StateMachine, Character, Animal)
 
-
 		Character.AncestryChanged:Wait()
 		PlayerService.Client.Spawned:FireAll(Player, Character, Animal)
 	end)
@@ -124,7 +123,6 @@ function PlayerService:ListenToState(Player: Player)
 		Player.Character = Animal
 
 		CharacterManager.Spawn(Animal)
-
 	end)
 end
 

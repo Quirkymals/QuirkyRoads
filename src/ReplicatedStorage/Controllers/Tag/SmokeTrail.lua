@@ -40,9 +40,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 --// module
 local SmokeTrail = {}
 
-function SmokeTrail.new()
-    
-end
-
+function SmokeTrail.new() end
 
 return SmokeTrail

@@ -79,7 +79,6 @@ local Lerp = require(Library.Lerp)
 local Particles = {}
 
 local function Checker(ParticlesObject: table | string)
-
 	if type(ParticlesObject) ~= "table" and type(ParticlesObject) ~= "string" then
 		error("First arg needs to be a table or string")
 	end

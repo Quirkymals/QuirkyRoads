@@ -37,7 +37,7 @@ API
 --// Services
 local ContentProvider = game:GetService("ContentProvider")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local KeyframeSequenceProvider = game:GetService('KeyframeSequenceProvider')
+local KeyframeSequenceProvider = game:GetService("KeyframeSequenceProvider")
 
 --// Class
 local AnimTrack = {}
@@ -48,9 +48,6 @@ local Cache = {}
 local AnimationPrefix = "rbxassetid://"
 
 local function GetAnimationLength(Animation)
-	
-	
-
 	local AssetId = Animation.AnimationId
 	if Cache[AssetId] then
 		return Cache[AssetId]
@@ -58,7 +55,7 @@ local function GetAnimationLength(Animation)
 
 	local Sequence = KeyframeSequenceProvider:GetKeyframeSequenceAsync(AssetId)
 	local Keyframes = Sequence:GetKeyframes()
-	
+
 	local Length = 0
 	for i = 1, #Keyframes do
 		local Time = Keyframes[i].Time
@@ -66,10 +63,10 @@ local function GetAnimationLength(Animation)
 			Length = Time
 		end
 	end
-	
+
 	Sequence:Destroy()
 	Cache[AssetId] = Length
-	
+
 	return Length, Keyframes
 end
 
@@ -93,18 +90,23 @@ function AnimTrack.new(Animator: Animator, Animation: Animation | string)
 		end
 	end
 
-	
-	ContentProvider:PreloadAsync({CurrentAnimation})
+	ContentProvider:PreloadAsync({ CurrentAnimation })
 	CurrentAnimationTrack = Animator:LoadAnimation(CurrentAnimation)
 
 	Connections.Stopped = CurrentAnimationTrack.Stopped:Connect(function()
 		CurrentAnimation:Destroy()
 		Connections.Stopped:Disconnect()
 	end)
-	
+
 	local Length, Keyframes = GetAnimationLength(CurrentAnimation)
 
-	local info = { Animation = CurrentAnimation, Track = CurrentAnimationTrack, Length = Length, Keyframes = Keyframes,  Connections = Connections}
+	local info = {
+		Animation = CurrentAnimation,
+		Track = CurrentAnimationTrack,
+		Length = Length,
+		Keyframes = Keyframes,
+		Connections = Connections,
+	}
 
 	setmetatable(info, AnimTrack)
 	return info
@@ -119,17 +121,15 @@ function AnimTrack:PlayOnce(fadeTime: number, weight: number, Speed: number)
 	Track.Looped = false
 	Track:Play(fadeTime or 0.100000001, weight or 1, Speed or 1)
 
-	Track.Stopped:Connect(function() 
+	Track.Stopped:Connect(function()
 		Track:AdjustSpeed(0)
 		Track.TimePosition = GetAnimationLength(self.Animation)
 	end)
 
 	print(self.Length)
 
-	task.wait(self.Length - .008)
+	task.wait(self.Length - 0.008)
 	Track:AdjustSpeed(0)
-	
-	
 end
 
 function AnimTrack:Disconnect()

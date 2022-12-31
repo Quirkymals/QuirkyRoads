@@ -43,10 +43,9 @@ local Animations = ReplicatedStorage.Animations
 --// module
 local Animation = {}
 
-
 function Animation.GetAnimations(Animal, QueriedAnimation: string): Animation | Folder
 	local CurrentFolder = Animations[Animal]
-    
+
 	if QueriedAnimation then
 		local Animation = CurrentFolder:FindFirstChild(QueriedAnimation)
 		if not Animation then

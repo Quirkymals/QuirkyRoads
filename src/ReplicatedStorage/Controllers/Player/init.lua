@@ -17,14 +17,11 @@ local PlayerController = Knit.CreateController({ Name = "PlayerController" })
 
 --// Modules
 
-
 --// Classes
 local Classes = ReplicatedStorage.Classes
 local CharacterClass = require(Classes.Character)
 
-
 --// Variables
-
 
 --// Private Functions
 local function AddDeathAnimation(Character: Model, Animal: string)
@@ -32,17 +29,16 @@ local function AddDeathAnimation(Character: Model, Animal: string)
 	local Connection
 
 	Connection = Humanoid.Died:Connect(function()
-		AnimTrack.new(Humanoid, Animation.GetAnimations(Animal, 'Death')):PlayOnce()
+		AnimTrack.new(Humanoid, Animation.GetAnimations(Animal, "Death")):PlayOnce()
 		Connection:Disconnect()
 	end)
 end
-
 
 function PlayerController:KnitInit() end
 
 function PlayerController:KnitStart()
 	-------------Variables-----------
-	self.PlayerService = Knit.GetService('PlayerService')
+	self.PlayerService = Knit.GetService("PlayerService")
 	-------------Variables-----------
 	-------------Classes-------------
 
@@ -55,7 +51,6 @@ function PlayerController:KnitStart()
 		end
 		CharacterClass.new(Player, ...):Init()
 	end)
-	
 
 	-----------Initialize------------
 end
