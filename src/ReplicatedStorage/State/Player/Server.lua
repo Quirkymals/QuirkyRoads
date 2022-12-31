@@ -44,7 +44,8 @@ local BasicState = require(ReplicatedStorage.Packages.BasicState)
 local ServerPlayerState = {}
 
 function ServerPlayerState.new(Player: Player)
-	local Config = Instance.new("Configuration", Player)
+	local Config = Instance.new("Configuration")
+	Config.Parent = Player
 
 	local Connections = {}
 
@@ -62,7 +63,7 @@ function ServerPlayerState.new(Player: Player)
 	})
 
 	function PlayerState:Disconnect()
-		for _, c: RBXScriptConnection in pairs(self.Connections) do
+		for _, c: RBXScriptConnection in pairs(PlayerState:Get("Connections")) do
 			c:Disconnect()
 		end
 	end

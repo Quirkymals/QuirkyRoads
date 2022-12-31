@@ -51,8 +51,8 @@ function Modes.LerpSpring(self)
 			return
 		end
 
-		local Character = GetCharacter(self.Player)
-		local Root = Character:WaitForChild("HumanoidRootPart")
+		Character = GetCharacter(self.Player)
+		Root = Character:WaitForChild("HumanoidRootPart")
 
 		self.Camera.CameraType = Enum.CameraType.Scriptable
 
@@ -66,8 +66,10 @@ function Modes.LerpSpring(self)
 
 		-- Cast the ray
 		local RX, RY, RZ
-		local Rot = CFrame.Angles(0, math.rad(self.cameraAngleX * UserInputService.MouseDeltaSensitivity), 0)
+
+		Rot = CFrame.Angles(0, math.rad(self.cameraAngleX * UserInputService.MouseDeltaSensitivity), 0)
 			* CFrame.Angles(math.rad(self.cameraAngleY * UserInputService.MouseDeltaSensitivity), 0, 0)
+
 		local BaseCF = (CFrame.new(Root.CFrame.Position) * Rot) * (CFrame.new(0, 0, self.Zoom))
 		local BlockedZoom = self.Zoom
 

@@ -39,7 +39,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
 --// Modules
-local AnimTrack = require(ReplicatedStorage.Util.AnimTrack)
 
 --// Module
 local CharacterManager = {}
@@ -100,7 +99,17 @@ function CharacterManager.Died(StateMachine, _Character: Model, Animal)
 
 		task.delay(3, function()
 			local Character: Model = ServerStorage:FindFirstChild(Animal):Clone()
-			Player.Character = Character
+
+			local s, e = pcall(function()
+				Player.Character = Character
+			end)
+
+			if not s then
+				Character:Destroy()
+				Connection:Disconnect()
+
+				return
+			end
 
 			CharacterManager.Spawn(Character)
 			Connection:Disconnect()

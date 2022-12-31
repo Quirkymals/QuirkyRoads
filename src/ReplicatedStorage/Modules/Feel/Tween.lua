@@ -42,7 +42,7 @@ local TweenService = game:GetService("TweenService")
 local Tween = {}
 
 function Tween.new(Object: Instance, Changes: table, Time: number, Settings: table)
-	local Settings = Settings or {}
+	Settings = Settings or {}
 
 	if Settings.Reversing then
 		local test = if Settings.Reversing ~= nil then Settings.Reversing else false

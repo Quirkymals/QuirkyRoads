@@ -44,8 +44,8 @@ local AnimTrack = {}
 AnimTrack.__index = AnimTrack
 
 --// Variables
-local Cache = {}
 local AnimationPrefix = "rbxassetid://"
+local Cache = {}
 
 local function GetAnimationLength(Animation)
 	local AssetId = Animation.AnimationId
@@ -67,7 +67,7 @@ local function GetAnimationLength(Animation)
 	Sequence:Destroy()
 	Cache[AssetId] = Length
 
-	return Length, Keyframes
+	return Length
 end
 
 function AnimTrack.new(Animator: Animator, Animation: Animation | string)
@@ -98,13 +98,18 @@ function AnimTrack.new(Animator: Animator, Animation: Animation | string)
 		Connections.Stopped:Disconnect()
 	end)
 
-	local Length, Keyframes = GetAnimationLength(CurrentAnimation)
+	-- local Length, Keyframes = GetAnimationLength(CurrentAnimation)
+	repeat
+		task.wait()
+	until CurrentAnimationTrack.Length ~= 0
+
+	local Length = CurrentAnimationTrack
 
 	local info = {
 		Animation = CurrentAnimation,
 		Track = CurrentAnimationTrack,
 		Length = Length,
-		Keyframes = Keyframes,
+		-- Keyframes = Keyframes,
 		Connections = Connections,
 	}
 
@@ -115,7 +120,7 @@ end
 function AnimTrack:PlayOnce(fadeTime: number, weight: number, Speed: number)
 	local Connections = self.Connections
 
-	local Keyframes = self.Keyframes
+	-- local Keyframes = self.Keyframes
 	local Track: AnimationTrack = self.Track
 
 	Track.Looped = false
@@ -126,9 +131,7 @@ function AnimTrack:PlayOnce(fadeTime: number, weight: number, Speed: number)
 		Track.TimePosition = GetAnimationLength(self.Animation)
 	end)
 
-	print(self.Length)
-
-	task.wait(self.Length - 0.008)
+	task.wait(Track.Length * 0.9)
 	Track:AdjustSpeed(0)
 end
 

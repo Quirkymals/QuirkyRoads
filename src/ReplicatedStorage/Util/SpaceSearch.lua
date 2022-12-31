@@ -45,8 +45,7 @@ function SpaceSearch.FindNearestPlayer(Player: Player)
 		return
 	end
 
-	for _, Player in pairs do
-		-- if pla
+	for _, _Player in pairs do
 	end
 end
 

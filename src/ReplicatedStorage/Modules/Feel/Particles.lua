@@ -91,7 +91,7 @@ local function Checker(ParticlesObject: table | string)
 end
 
 local function MakeParticle(Mesh: BasePart | MeshPart, CF: CFrame)
-	local Mesh: BasePart | MeshPart = Mesh[math.random(1, #Mesh)]:Clone()
+	Mesh = Mesh[math.random(1, #Mesh)]:Clone()
 	local MeshSize: Vector3 = Mesh.Size
 
 	Mesh.Size = Vector3.new()
@@ -244,8 +244,8 @@ function Particles.Disconnect(key: string | {}, Connection: string)
 	if Connection then
 		self.Connections[Connection]:Disconnect()
 	else
-		for Index: string, Connection: RBXScriptConnection in pairs(self.Connections) do
-			Connection:Disconnect()
+		for Index: string, _Connection: RBXScriptConnection in pairs(self.Connections) do
+			_Connection:Disconnect()
 
 			self.Connections[Index] = nil
 		end

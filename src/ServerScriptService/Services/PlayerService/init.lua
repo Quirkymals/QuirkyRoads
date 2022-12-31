@@ -40,12 +40,12 @@ local function AddState(Player: Player)
 
 		Knit.States[Player] = PlayerState.new(Player)
 	else
-		for _, Player in pairs(Players:GetChildren()) do
-			if PlayerStateExist(Player) then
+		for _, _Player in pairs(Players:GetChildren()) do
+			if PlayerStateExist(_Player) then
 				return
 			end
 
-			Knit.States[Player] = PlayerState.new(Player)
+			Knit.States[_Player] = PlayerState.new(_Player)
 		end
 	end
 end
@@ -73,7 +73,8 @@ end
 
 --// Knit Starting
 function PlayerService:KnitInit()
-	local CharactersFolder = Instance.new("Folder", workspace)
+	local CharactersFolder = Instance.new("Folder")
+	CharactersFolder.Parent = workspace
 	CharactersFolder.Name = "Players"
 
 	self.CharactersFolder = CharactersFolder

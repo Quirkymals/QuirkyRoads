@@ -196,10 +196,10 @@ function Camera:playerInput(actionName, inputState, inputObject)
 	if actionName == "MouseMovement" then
 		if inputState == Enum.UserInputState.Change then
 			if inputObject.UserInputType == Enum.UserInputType.MouseMovement then
-				if UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then
-					UserInputService.MouseBehavior = MouseBehavior.LockCurrentPosition
-					self:TrackRotation(inputObject)
-				elseif inputState == Enum.UserInputState.Change and self.ShiftLock then
+				if
+					UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
+					or inputState == Enum.UserInputState.Change and self.ShiftLock
+				then
 					UserInputService.MouseBehavior = MouseBehavior.LockCurrentPosition
 					self:TrackRotation(inputObject)
 				else
@@ -228,7 +228,7 @@ function Camera:playerInput(actionName, inputState, inputObject)
 			self.OffsetRight = not self.OffsetRight
 			-- tween.new(Offset, {Value = OffsetCount * (OffsetRight and 1 or -1)}, .5):Play()
 		end
-	elseif actionName == "MobileZoom" then
+		-- elseif actionName == "MobileZoom" then
 	end
 end
 

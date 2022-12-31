@@ -43,15 +43,15 @@ local Animations = ReplicatedStorage.Animations
 --// module
 local Animation = {}
 
-function Animation.GetAnimations(Animal, QueriedAnimation: string): Animation | Folder
+function Animation.GetAnimations(Animal, QueriedAnimationName: string): Animation | Folder
 	local CurrentFolder = Animations[Animal]
 
-	if QueriedAnimation then
-		local Animation = CurrentFolder:FindFirstChild(QueriedAnimation)
-		if not Animation then
-			return warn(QueriedAnimation .. " animation does not exist")
+	if QueriedAnimationName then
+		local QueriedAnimation = CurrentFolder:FindFirstChild(QueriedAnimationName)
+		if not QueriedAnimation then
+			return warn(QueriedAnimationName .. " animation does not exist")
 		else
-			return Animation:Clone()
+			return QueriedAnimation:Clone()
 		end
 	else
 		return CurrentFolder
