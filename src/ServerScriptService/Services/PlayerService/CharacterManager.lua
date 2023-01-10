@@ -39,18 +39,21 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
 --// Modules
+local Animations = require(script.Parent.Animations)
 
 --// Module
 local CharacterManager = {}
 
 --// Variables
 local Spawns = workspace.Spawns or warn("No 'Spawns' folder in workspace")
-local Animations = ReplicatedStorage.Animations
+-- local Animations = ReplicatedStorage.Animations
+
+local AnimationPrefix = 'rbxassetid://'
 
 function CharacterManager.GetAnimations(Animal, QueriedAnimation: string): Animation | Folder
 	local CurrentFolder = Animations[Animal]
 	if QueriedAnimation then
-		local Animation = CurrentFolder:FindFirstChild(QueriedAnimation)
+		local Animation = CurrentFolder[QueriedAnimation]
 		if not Animation then
 			return warn(QueriedAnimation .. " animation does not exist")
 		else
@@ -69,19 +72,21 @@ end
 
 function CharacterManager.AddAnimations(Character: Model, Animal: string)
 	local Animate: LocalScript = ServerStorage.Animate:Clone()
-	local AnimationFolder: Folder = Animations[Animal]
+	local AnimationDictionary: Folder = Animations[Animal]
+
+	print(AnimationDictionary)
 
 	local Anims = {}
 
 	Animate.Parent = Character
 	for _, Animation: string in pairs({ "Run", "Idle", "Jump", "Fall", "Death" }) do
-		local CurrentAnimation: Animation = AnimationFolder:WaitForChild(Animation)
+		local CurrentAnimation: number = Animation ~= 'Fall' and AnimationDictionary[Animation] or AnimationDictionary['Fly']
 		if Animation ~= "Idle" and Animation ~= "Death" then
 			Animate:FindFirstChild(string.lower(Animation))[Animation .. "Anim"].AnimationId =
-				CurrentAnimation.AnimationId
-		elseif CurrentAnimation == "Idle" then
-			Animate.idle.Animation1.AnimationId = CurrentAnimation.AnimationId
-			Animate.idle.Animation2.AnimationId = CurrentAnimation.AnimationId
+				AnimationPrefix..CurrentAnimation
+		elseif Animation == "Idle" then
+			Animate.idle.Animation1.AnimationId = AnimationPrefix..AnimationDictionary[Animation]
+			Animate.idle.Animation2.AnimationId = AnimationPrefix..AnimationDictionary[Animation..'2']
 		end
 	end
 

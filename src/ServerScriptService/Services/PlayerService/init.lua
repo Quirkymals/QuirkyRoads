@@ -131,7 +131,7 @@ function PlayerService:AddInfoToState(Player)
 	local StateMachine = GetPlayerState(Player)
 	local Profile = self.DataService:GetData(Player)
 
-	local Animal = Profile["Animal"] or "Parrot"
+	local Animal = 'Mice'--Profile["Animal"] or "Parrot"
 	StateMachine:Set("Animal", Animal)
 end
 

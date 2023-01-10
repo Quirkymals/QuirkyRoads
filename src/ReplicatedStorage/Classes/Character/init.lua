@@ -80,7 +80,7 @@ function Character:Listen()
 	local PrimaryPart: MeshPart | Part = self._Character:WaitForChild("HumanoidRootPart")
 
 	self.Connections["Died"] = Humanoid.Died:Connect(function()
-		Particles.Died(self._Particles)
+		-- Particles.Died(self._Particles)
 		Particles.Destroy(self._Particles)
 
 		self:Destroy()

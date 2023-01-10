@@ -38,23 +38,34 @@ API
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --// Variables
-local Animations = ReplicatedStorage.Animations
+local Animations = require(script.Animations)
+
+local AnimationPrefix = 'rbxassetid://'
 
 --// module
 local Animation = {}
+local Cache = {}
 
 function Animation.GetAnimations(Animal, QueriedAnimationName: string): Animation | Folder
-	local CurrentFolder = Animations[Animal]
+	local CurrentDictionary = Animations[Animal]
+
+    if not Cache[Animal] then
+        Cache[Animal] = {}
+    end
 
 	if QueriedAnimationName then
-		local QueriedAnimation = CurrentFolder:FindFirstChild(QueriedAnimationName)
+		local QueriedAnimation = CurrentDictionary[QueriedAnimationName]
 		if not QueriedAnimation then
 			return warn(QueriedAnimationName .. " animation does not exist")
 		else
-			return QueriedAnimation:Clone()
+            if not Cache[Animal][QueriedAnimationName] then
+                Cache[Animal][QueriedAnimationName] = Instance.new('Animation')
+                Cache[Animal][QueriedAnimationName].AnimationId = AnimationPrefix..QueriedAnimation
+            end
+			return Cache[Animal][QueriedAnimationName]
 		end
 	else
-		return CurrentFolder
+		return CurrentDictionary
 	end
 end
 
