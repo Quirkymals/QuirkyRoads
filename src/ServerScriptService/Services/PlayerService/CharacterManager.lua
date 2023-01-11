@@ -79,11 +79,24 @@ function CharacterManager.AddAnimations(Character: Model, Animal: string)
 	local Anims = {}
 
 	Animate.Parent = Character
-	for _, Animation: string in pairs({ "Run", "Idle", "Jump", "Fall", "Death" }) do
+	for _, Animation: string in pairs({ "Run", "Idle", "Jump", "Fall", "Death", "Bounce", "Spin", "Fear" }) do
 		local CurrentAnimation: number = Animation ~= 'Fall' and AnimationDictionary[Animation] or AnimationDictionary['Fly']
 		if Animation ~= "Idle" and Animation ~= "Death" then
-			Animate:FindFirstChild(string.lower(Animation))[Animation .. "Anim"].AnimationId =
+			local Target = Animation
+
+			if Target == 'Bounce' then
+				Target = 'Dance'
+			elseif Target == 'Spin' then
+				Target = 'Dance2'
+			elseif Target == "Fear" then
+				Target = 'Dance3'
+			end
+
+			for i, AnimationFile: Animation in pairs(Animate:FindFirstChild(string.lower(Target)):GetChildren()) do
+				AnimationFile.AnimationId =
 				AnimationPrefix..CurrentAnimation
+			end
+
 		elseif Animation == "Idle" then
 			Animate.idle.Animation1.AnimationId = AnimationPrefix..AnimationDictionary[Animation]
 			Animate.idle.Animation2.AnimationId = AnimationPrefix..AnimationDictionary[Animation..'2']
