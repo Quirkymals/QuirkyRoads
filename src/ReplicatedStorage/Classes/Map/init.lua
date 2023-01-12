@@ -1,12 +1,12 @@
 --[[
-Hoverboard
+Map
 
     A short description of the module.
 
 SYNOPSIS
 
     -- Lua code that showcases an overview of the API.
-    local foobar = Hoverboard.TopLevel('foo')
+    local foobar = Map.TopLevel('foo')
     print(foobar.Thing)
 
 DESCRIPTION
@@ -32,25 +32,42 @@ API
     }
 ]]
 
--- Implementation of Hoverboard.
+-- Implementation of Map.
 
 --// Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --// Class
-local Hoverboard = {}
-Hoverboard.__index = Hoverboard
+local Map = {}
+Map.__index = Map
 
-function Hoverboard.new(Character, Base: Part)
-	local info = {
-		Character = Character,
-		Base = Base,
-	}
 
-	setmetatable(info, Hoverboard)
-	return info
+function Map.new()
+    
+    local info = {
+        Connections = {}
+    }
+    setmetatable(info, Map)
+    return info
 end
 
-function Hoverboard:Init() end
+function Map:Init()
+    
+end
 
-return Hoverboard
+function Map:Disconnect()
+    for _, c: RBXScriptConnection in pairs(self.Connections) do
+        c:Disconnect()
+    end
+end
+
+function Map:Destroy()
+    self:Disconnect()
+    
+    setmetatable(self, nil)
+    table.clear(self)
+    table.freeze(self)
+end
+
+
+return Map
