@@ -45,10 +45,10 @@ local Animations = require(script.Parent.Animations)
 local CharacterManager = {}
 
 --// Variables
-local Spawns = workspace:FindFirstChild('Spawns') or warn("No 'Spawns' folder in workspace")
+local Spawns = workspace:FindFirstChild("Spawns") or warn("No 'Spawns' folder in workspace")
 -- local Animations = ReplicatedStorage.Animations
 
-local AnimationPrefix = 'rbxassetid://'
+local AnimationPrefix = "rbxassetid://"
 
 function CharacterManager.GetAnimations(Animal, QueriedAnimation: string): Animation | Folder
 	local CurrentFolder = Animations[Animal]
@@ -80,26 +80,25 @@ function CharacterManager.AddAnimations(Character: Model, Animal: string)
 
 	Animate.Parent = Character
 	for _, Animation: string in pairs({ "Run", "Idle", "Jump", "Fall", "Death", "Bounce", "Spin", "Fear" }) do
-		local CurrentAnimation: number = Animation ~= 'Fall' and AnimationDictionary[Animation] or AnimationDictionary['Fly']
+		local CurrentAnimation: number = Animation ~= "Fall" and AnimationDictionary[Animation]
+			or AnimationDictionary["Fly"]
 		if Animation ~= "Idle" and Animation ~= "Death" then
 			local Target = Animation
 
-			if Target == 'Bounce' then
-				Target = 'Dance'
-			elseif Target == 'Spin' then
-				Target = 'Dance2'
+			if Target == "Bounce" then
+				Target = "Dance"
+			elseif Target == "Spin" then
+				Target = "Dance2"
 			elseif Target == "Fear" then
-				Target = 'Dance3'
+				Target = "Dance3"
 			end
 
 			for i, AnimationFile: Animation in pairs(Animate:FindFirstChild(string.lower(Target)):GetChildren()) do
-				AnimationFile.AnimationId =
-				AnimationPrefix..CurrentAnimation
+				AnimationFile.AnimationId = AnimationPrefix .. CurrentAnimation
 			end
-
 		elseif Animation == "Idle" then
-			Animate.idle.Animation1.AnimationId = AnimationPrefix..AnimationDictionary[Animation]
-			Animate.idle.Animation2.AnimationId = AnimationPrefix..AnimationDictionary[Animation..'2']
+			Animate.idle.Animation1.AnimationId = AnimationPrefix .. AnimationDictionary[Animation]
+			Animate.idle.Animation2.AnimationId = AnimationPrefix .. AnimationDictionary[Animation .. "2"]
 		end
 	end
 
