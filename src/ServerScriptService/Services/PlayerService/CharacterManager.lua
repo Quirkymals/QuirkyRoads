@@ -45,7 +45,7 @@ local Animations = require(script.Parent.Animations)
 local CharacterManager = {}
 
 --// Variables
-local Spawns = workspace.Spawns or warn("No 'Spawns' folder in workspace")
+local Spawns = workspace:FindFirstChild('Spawns') or warn("No 'Spawns' folder in workspace")
 -- local Animations = ReplicatedStorage.Animations
 
 local AnimationPrefix = 'rbxassetid://'

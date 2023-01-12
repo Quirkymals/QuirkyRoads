@@ -115,7 +115,7 @@ function Particles.new(key: string | Instance, Humanoid: Humanoid, Mesh: MeshPar
 
 	local self: ParticleClass = {
 		key = key,
-		Active = false,
+		Active = true,
 		CanCreateParticle = true,
 
 		Mesh = (Mesh:IsA("MeshPart") and not nil) and { Mesh } or Mesh,

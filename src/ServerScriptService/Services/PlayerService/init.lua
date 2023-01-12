@@ -21,7 +21,6 @@ local PlayerService = Knit.CreateService({
 })
 
 --// Variables
-local Animations: Folder = ReplicatedStorage.Animations
 
 --// Private Functions
 local function PlayerStateExist(Player: Player)
