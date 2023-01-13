@@ -21,9 +21,7 @@ function GameController:KnitStart()
 
 	-------------Classes-------------
 	-----------Initialize------------
-	GameService.CreateObstacle:Connect(function(CurrentLevelFolder, SetName, Marker)
-		Obstacle.new(CurrentLevelFolder, SetName, Marker)
-	end)
+	GameService.CreateObstacle:Connect(Obstacle.new)
 	-----------Initialize------------
 end
 

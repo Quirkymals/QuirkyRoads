@@ -99,7 +99,7 @@ function Level:CreateObstacle(SetName: string, Marker: Model)
 		MarkerObserverSet[tonumber(Marker.Name)] = false
 
 		for _, Player: Player in pairs(self.Players) do
-			self.CreateObstacleSignal:Fire(Player, self.CurrentLevelFolder, SetName, Marker.Name)
+			self.CreateObstacleSignal:Fire(Player, self.CurrentLevelFolder.Name, string.sub(SetName, -#SetName, -2)..'Markers', Marker.Name)
 		end
 
 		task.delay(math.random(3, 5), function()
@@ -130,14 +130,12 @@ function Level:Init()
 	local desiredInterval = 2.5 --fire every 2.5 seconds
 	local counter = 0
 
-	RunService.Heartbeat:Connect(function(step)
+	self.Connections['Update'] = RunService.Heartbeat:Connect(function(step)
 		counter = counter + step
 		if counter >= desiredInterval then
 			counter = counter - desiredInterval
 
 			self:Update()
-
-			print("Updated")
 		end
 	end)
 end

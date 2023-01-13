@@ -40,10 +40,13 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 --// module
 local Obstacle = {}
 
-function Obstacle.new(CurrentLevelFolder, SetName, Marker)
-	local Marker = CurrentLevelFolder:FindFirstChild(SetName):FindFirstChild(Marker)
+function Obstacle.new(CurrentLevelFolderName, SetName, MarkerName, ObstacleName: string, Time: number)
+	local CurrentLevelFolder = workspace:FindFirstChild(CurrentLevelFolderName)
+	local ObstacleMarkerSet = CurrentLevelFolder:FindFirstChild(SetName..'Markers')
+    local Marker = ObstacleMarkerSet:FindFirstChild(MarkerName)
 
-	print(Marker)
+
+    print(Marker)
 end
 
 return Obstacle
