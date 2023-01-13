@@ -5,7 +5,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local BasicState = require(ReplicatedStorage.Packages.BasicState)
 
 local Player = BasicState.new({
-	Exp = 0,
+	Level = 0,
+	Map = nil,
 })
 
 return Player

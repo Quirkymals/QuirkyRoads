@@ -1,12 +1,12 @@
 --[[
-Map
+Obstacle
 
     A short description of the module.
 
 SYNOPSIS
 
     -- Lua code that showcases an overview of the API.
-    local foobar = Map.TopLevel('foo')
+    local foobar = Obstacle.TopLevel('foo')
     print(foobar.Thing)
 
 DESCRIPTION
@@ -32,37 +32,18 @@ API
     }
 ]]
 
--- Implementation of Map.
+-- Implementation of Obstacle.
 
 --// Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
---// Class
-local Map = {}
-Map.__index = Map
+--// module
+local Obstacle = {}
 
-function Map.new()
-	local info = {
-		Connections = {},
-	}
-	setmetatable(info, Map)
-	return info
+function Obstacle.new(CurrentLevelFolder, SetName, Marker)
+	local Marker = CurrentLevelFolder:FindFirstChild(SetName):FindFirstChild(Marker)
+
+	print(Marker)
 end
 
-function Map:Init() end
-
-function Map:Disconnect()
-	for _, c: RBXScriptConnection in pairs(self.Connections) do
-		c:Disconnect()
-	end
-end
-
-function Map:Destroy()
-	self:Disconnect()
-
-	setmetatable(self, nil)
-	table.clear(self)
-	table.freeze(self)
-end
-
-return Map
+return Obstacle

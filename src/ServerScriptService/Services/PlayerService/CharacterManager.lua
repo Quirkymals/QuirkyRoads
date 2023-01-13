@@ -74,8 +74,6 @@ function CharacterManager.AddAnimations(Character: Model, Animal: string)
 	local Animate: LocalScript = ServerStorage.Animate:Clone()
 	local AnimationDictionary: Folder = Animations[Animal]
 
-	print(AnimationDictionary)
-
 	local Anims = {}
 
 	Animate.Parent = Character

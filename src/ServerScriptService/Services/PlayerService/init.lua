@@ -31,43 +31,8 @@ local function PlayerStateExist(Player: Player)
 	end
 end
 
-local function AddState(Player: Player)
-	if Player then
-		if PlayerStateExist(Player) then
-			return
-		end
-
-		Knit.States[Player] = PlayerState.new(Player)
-	else
-		for _, _Player in pairs(Players:GetChildren()) do
-			if PlayerStateExist(_Player) then
-				return
-			end
-
-			Knit.States[_Player] = PlayerState.new(_Player)
-		end
-	end
-end
-
 local function RemoveState(Player: Player)
 	Knit.States[Player]:Destroy()
-end
-
-local function GetPlayerState(Player)
-	local Attempts = 0
-	local MaxAttempts = 30
-
-	repeat
-		Attempts += 1
-		task.wait(0.25)
-	until Knit.States[Player] or Attempts == MaxAttempts
-
-	if Attempts == MaxAttempts then
-		print("States: ", Knit.States)
-		return error("Cannot find state after " .. MaxAttempts .. " attempts.")
-	end
-
-	return Knit.States[Player]
 end
 
 --// Knit Starting
@@ -91,7 +56,7 @@ function PlayerService:KnitStart()
 	-----------Initialize------------
 	Players.PlayerAdded:Connect(function(player)
 		--// Private
-		AddState(player)
+		self:AddState(player)
 
 		--// Methods
 		self:ListenToState(player)
@@ -99,13 +64,48 @@ function PlayerService:KnitStart()
 	end)
 	Players.PlayerRemoving:Connect(RemoveState)
 
-	AddState()
+	self:AddState()
 	-----------Initialize------------
 end
 
 --// Methods
+function PlayerService:AddState(Player: Player)
+	if Player then
+		if PlayerStateExist(Player) then
+			return
+		end
+
+		Knit.States[Player] = PlayerState.new(Player)
+	else
+		for _, _Player in pairs(Players:GetChildren()) do
+			if PlayerStateExist(_Player) then
+				return
+			end
+
+			Knit.States[_Player] = PlayerState.new(_Player)
+		end
+	end
+end
+
+function PlayerService:GetPlayerState(Player)
+	local Attempts = 0
+	local MaxAttempts = 30
+
+	repeat
+		Attempts += 1
+		task.wait(0.25)
+	until Knit.States[Player] or Attempts == MaxAttempts
+
+	if Attempts == MaxAttempts then
+		print("States: ", Knit.States)
+		return error("Cannot find state after " .. MaxAttempts .. " attempts.")
+	end
+
+	return Knit.States[Player]
+end
+
 function PlayerService:ListenToState(Player: Player)
-	local StateMachine = GetPlayerState(Player)
+	local StateMachine = self:GetPlayerState(Player)
 	local Profile = self.DataService:GetData(Player)
 
 	StateMachine:GetChangedSignal("Character"):Connect(function(Character: Model)
@@ -127,7 +127,7 @@ function PlayerService:ListenToState(Player: Player)
 end
 
 function PlayerService:AddInfoToState(Player)
-	local StateMachine = GetPlayerState(Player)
+	local StateMachine = self:GetPlayerState(Player)
 	local Profile = self.DataService:GetData(Player)
 
 	local Animal = Profile["Animal"] or "Parrot"
