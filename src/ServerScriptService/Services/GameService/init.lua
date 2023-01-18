@@ -12,6 +12,7 @@ local Knit = require(ReplicatedStorage.Packages.Knit)
 local GameService = Knit.CreateService({
 	Name = "GameService",
 	Client = {
+		ChangeLevel = Knit.CreateSignal(),
 		CreateObstacle = Knit.CreateSignal(),
 	},
 })
@@ -35,6 +36,7 @@ end
 function GameService:KnitStart()
 	-------------Variables-----------
 	self.PlayerService = Knit.GetService("PlayerService")
+	self.Once = false
 	-------------Variables-----------
 	-------------Classes-------------
 
@@ -93,6 +95,7 @@ function GameService:RemoveLevelClass(Level: number)
 	end
 
 	CurrentLevelClass:Destroy()
+	self.LevelClasses[Level] = nil
 end
 
 function GameService:UpdateLevels(...)
@@ -122,11 +125,21 @@ function GameService:ObservePlayer(Player: Player)
 	local Connections = PlayerState:Get("Connections")
 
 	Connections["LevelObserver"] = PlayerState:GetChangedSignal("Level"):Connect(function(CurrentLevel, PreviousLevel)
+		self.Client.ChangeLevel:Fire(Player, CurrentLevel, PreviousLevel)
+
 		self:ManageLevelOccupancy(Player, CurrentLevel, PreviousLevel)
 	end)
 
 	PlayerState:Set("Connections", Connections)
 	PlayerState:Set("Level", 1)
+
+	-- task.delay(10, function()
+	-- 	print('Level Change')
+	-- 	if self.Once then return end
+
+	-- 	self.Once = true
+	-- 	PlayerState:Set("Level", 2)
+	-- end)
 end
 
 function GameService:ManageLevelOccupancy(Player: Player, CurrentLevel: number, PreviousLevel: number)

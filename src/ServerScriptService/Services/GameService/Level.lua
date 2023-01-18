@@ -34,9 +34,15 @@ API
 
 -- Implementation of Level.
 
+--// Types
+export type TimeRange = { Min: number, Max: number }
+
 --// Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+
+--// Modules
+local LevelsInfo = require(ReplicatedStorage.Info.Levels)
 
 --// Variables
 local Levels = ReplicatedStorage:FindFirstChild("Levels")
@@ -48,14 +54,21 @@ local Level = {}
 Level.__index = Level
 
 function Level.new(GameService, CurrentLevel: number)
+	local LevelInfo = LevelsInfo[CurrentLevel]
+
 	local info = {
 		GameService = GameService,
+		PlayerService = GameService.PlayerService,
+
 		CreateObstacleSignal = GameService.Client.CreateObstacle,
 
 		CurrentLevel = CurrentLevel,
 		CurrentLevelFolder = Levels:FindFirstChild(tostring(CurrentLevel)),
 
 		Players = {},
+
+		DelayRanges = LevelInfo.DelayRanges,
+		TimeRanges = LevelInfo.TimeRanges,
 
 		Markers = {
 			Logs = {},
@@ -77,6 +90,7 @@ function Level.new(GameService, CurrentLevel: number)
 
 		Connections = {},
 	}
+
 	setmetatable(info, Level)
 	return info
 end
@@ -91,19 +105,45 @@ function Level:GetMarkerSet(SetName: string)
 	end
 end
 
+function Level:AddMillisecondsToTime(Time, TimeRange: TimeRange)
+	local MS = math.random(0, 100) / 100 * 2
+
+	if Time + MS < TimeRange.Max then
+		return Time + MS
+	end
+
+	return Time - MS
+end
+
 function Level:CreateObstacle(SetName: string, Marker: Model)
 	local MarkerObserverSet = self.Spawned[SetName]
+	local SetNameSingular = string.sub(SetName, -#SetName, -2)
 	local MarkerObstacleObserver = MarkerObserverSet[tonumber(Marker.Name)]
+	local SetNameObstacleFolderChildren = self.CurrentLevelFolder.Obstacles:FindFirstChild(SetName):GetChildren()
+
+	local TimeRange: TimeRange = self.TimeRanges[SetName]
+	local Time = self:AddMillisecondsToTime(math.random(TimeRange.Min, TimeRange.Max), TimeRange)
+
+	local DelayRange: TimeRange = self.DelayRanges[SetName] or nil
+	local DelayTime = DelayRange and math.random(DelayRange.Min, DelayRange.Max) or nil
+	local Obstacle = SetNameObstacleFolderChildren[math.random(1, #SetNameObstacleFolderChildren)]
 
 	if MarkerObstacleObserver == false then
-		MarkerObserverSet[tonumber(Marker.Name)] = false
+		MarkerObserverSet[tonumber(Marker.Name)] = true
 
 		for _, Player: Player in pairs(self.Players) do
-			self.CreateObstacleSignal:Fire(Player, self.CurrentLevelFolder.Name, string.sub(SetName, -#SetName, -2)..'Markers', Marker.Name)
+			self.CreateObstacleSignal:Fire(
+				Player,
+				self.CurrentLevelFolder.Name,
+				SetNameSingular,
+				Marker.Name,
+				Obstacle.Name,
+				Time
+			)
 		end
 
-		task.delay(math.random(3, 5), function()
-			MarkerObserverSet[tonumber(Marker.Name)] = true
+		task.delay(DelayTime or (Time / 4), function()
+			MarkerObserverSet[tonumber(Marker.Name)] = false
 		end)
 	else
 		return
@@ -119,6 +159,9 @@ end
 function Level:Update(deltaTime)
 	for MarkerSetName: string, MarkerSet: { Model } in pairs(self.Markers) do
 		for MarkersSetID, Marker: Model in pairs(MarkerSet) do
+			if not self then
+				break
+			end
 			self:CreateObstacle(MarkerSetName, Marker)
 		end
 	end
@@ -127,17 +170,26 @@ end
 function Level:Init()
 	self:GetAllMarkers()
 
-	local desiredInterval = 2.5 --fire every 2.5 seconds
+	local desiredInterval = 0.5 --fire every 2.5 seconds
+	local hitBoxInterval = 1 --fire every 2.5 seconds
 	local counter = 0
+	local hitBoxCounter = 0
 
-	self.Connections['Update'] = RunService.Heartbeat:Connect(function(step)
+	self.Connections["Update"] = RunService.Heartbeat:Connect(function(step)
 		counter = counter + step
 		if counter >= desiredInterval then
 			counter = counter - desiredInterval
-
 			self:Update()
 		end
 	end)
+
+	-- self.Connections['UpdateHitBoxes'] = RunService.Heartbeat:Connect(function(step)
+	-- 	counter = counter + step
+	-- 	if counter >= desiredInterval then
+	-- 		counter = counter - desiredInterval
+	-- 		self:Update()
+	-- 	end
+	-- end)
 end
 
 function Level:Disconnect()
