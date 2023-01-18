@@ -28,10 +28,10 @@ local function AddDeathAnimation(Character: Model, Animal: string)
 	local Humanoid: Humanoid = Character:WaitForChild("Humanoid")
 	local Connection
 
-	local DeathAnimation = AnimTrack.new(Humanoid, Animation.GetAnimations(Animal, "Death"))
+	-- local DeathAnimation = AnimTrack.new(Humanoid, Animation.GetAnimations(Animal, "Death"))
 
 	Connection = Humanoid.Died:Connect(function()
-		DeathAnimation:PlayOnce()
+		-- DeathAnimation:PlayOnce()
 		Connection:Disconnect()
 	end)
 end

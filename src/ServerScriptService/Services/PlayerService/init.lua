@@ -2,6 +2,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
+local SoundService = game:GetService("SoundService")
 
 --// Modules
 local PlayerState = require(ReplicatedStorage.State.Player.Server)
@@ -15,12 +16,13 @@ Knit.States = {}
 local PlayerService = Knit.CreateService({
 	Name = "PlayerService",
 	Client = {
-
+		Kill = Knit.CreateSignal(),
 		Spawned = Knit.CreateSignal(),
 	},
 })
 
 --// Variables
+local CollisionSFX: { Sound } = SoundService.Collisions:GetChildren()
 
 --// Private Functions
 local function PlayerStateExist(Player: Player)
@@ -33,6 +35,11 @@ end
 
 local function RemoveState(Player: Player)
 	Knit.States[Player]:Destroy()
+end
+
+local function DeleteBones(PrimaryPart: Part | MeshPart)
+	local RootBone: Bone = PrimaryPart:FindFirstChildOfClass("Bone")
+	RootBone:Destroy()
 end
 
 --// Knit Starting
@@ -63,6 +70,25 @@ function PlayerService:KnitStart()
 		self:AddInfoToState(player)
 	end)
 	Players.PlayerRemoving:Connect(RemoveState)
+
+	self.Client.Kill:Connect(function(Player)
+		local Character = Player.Character
+
+		local PrimaryPart: MeshPart = Character.PrimaryPart
+		local Humanoid: Humanoid = Character.Humanoid
+
+		local TireMarks = Instance.new("Decal")
+		TireMarks.Texture = "rbxassetid://8696601744"
+		TireMarks.Face = Enum.NormalId.Top
+		TireMarks.Parent = PrimaryPart
+
+		DeleteBones(PrimaryPart)
+
+		PrimaryPart.Size = Vector3.new(PrimaryPart.Size.X, 0, PrimaryPart.Size.Z)
+		-- PrimaryPart.Anchored = true
+
+		Humanoid:TakeDamage(Humanoid.MaxHealth)
+	end)
 
 	self:AddState()
 	-----------Initialize------------
@@ -110,6 +136,7 @@ function PlayerService:ListenToState(Player: Player)
 
 	StateMachine:GetChangedSignal("Character"):Connect(function(Character: Model)
 		local Animal = StateMachine:Get("Animal")
+		local Humanoid: Humanoid = Character.Humanoid
 
 		CharacterManager.AddAnimations(Character, Animal)
 		CharacterManager.Died(StateMachine, Character, Animal)
@@ -130,7 +157,7 @@ function PlayerService:AddInfoToState(Player)
 	local StateMachine = self:GetPlayerState(Player)
 	local Profile = self.DataService:GetData(Player)
 
-	local Animal = Profile["Animal"] or "Parrot"
+	local Animal = "Dove" -- Profile["Animal"] or "Parrot"
 	StateMachine:Set("Animal", Animal)
 end
 

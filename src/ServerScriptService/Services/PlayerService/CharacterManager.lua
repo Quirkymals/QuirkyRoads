@@ -110,8 +110,6 @@ function CharacterManager.Died(StateMachine, _Character: Model, Animal)
 	local Connection
 
 	Connection = Humanoid.Died:Connect(function()
-		-- _Character.PrimaryPart.Anchored = true
-
 		task.delay(3, function()
 			local Character: Model = ServerStorage:FindFirstChild(Animal):Clone()
 

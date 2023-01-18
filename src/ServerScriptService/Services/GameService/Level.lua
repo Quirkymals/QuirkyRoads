@@ -182,7 +182,6 @@ function Level:Init()
 	end)
 
 	-- self.Connections['UpdateHitBoxes'] = RunService.Heartbeat:Connect(function(step)
-
 end
 
 function Level:Disconnect()

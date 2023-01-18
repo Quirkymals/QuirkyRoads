@@ -23,6 +23,7 @@ function GameController:KnitInit() end
 function GameController:KnitStart()
 	-------------Variables-----------
 	local GameService = Knit.GetService("GameService")
+	local PlayerService = Knit.GetService("PlayerService")
 	-------------Variables-----------
 	-------------Classes-------------
 	PlayerObserver.new(GameService)
