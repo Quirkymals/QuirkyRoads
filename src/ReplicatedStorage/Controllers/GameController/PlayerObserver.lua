@@ -101,8 +101,6 @@ function PlayerObserver.SetServerSpawnPoints(LevelFolder)
 		table.insert(temp, SP.CFrame)
 	end
 
-	print(temp)
-
 	PlayerService.SetSpawnPoints:Fire(temp)
 end
 
