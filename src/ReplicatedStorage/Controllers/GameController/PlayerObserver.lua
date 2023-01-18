@@ -126,6 +126,8 @@ function PlayerObserver.Camera(Character: { PrimaryPart: MeshPart })
 	local Forward = math.clamp((GoalLocation.Position - SpawnLocation.Position).Magnitude, -1, 1)
 	local SpawnLocationCFrame = SpawnLocation.CFrame
 
+    Character:WaitForChild('HumanoidRootPart', 5)
+
 	CameraConnection = RunService.RenderStepped:Connect(function(deltaTime)
 		if not Character or not Character:FindFirstChild("HumanoidRootPart") then
 			CameraConnection:Disconnect()
@@ -147,13 +149,25 @@ function PlayerObserver.Camera(Character: { PrimaryPart: MeshPart })
 end
 
 function PlayerObserver.WalkOnLog(Character)
+    if Function then Function:Disconnect(); end
+    if Function2 then Function2:Disconnect(); end
+
 	local LastLogCF
+
+    Character:WaitForChild('HumanoidRootPart', 5)
 
 	Function = RunService.RenderStepped:Connect(function()
 		--------------------------------------------------------------- CHECK PLATFORM BELOW
 
 		local Ignore = Character
 		local RootPart = Character.PrimaryPart
+
+		if not RootPart then
+			if Function then Function:Disconnect(); end
+            if Function2 then Function2:Disconnect(); end
+
+            return 
+		end
 
 		local ray = Ray.new(RootPart.CFrame.p, Vector3.new(0, -50, 0))
 		local Hit, Position, Normal, Material = workspace:FindPartOnRay(ray, Ignore)

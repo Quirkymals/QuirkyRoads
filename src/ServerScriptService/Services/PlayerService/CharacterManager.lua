@@ -103,28 +103,42 @@ function CharacterManager.AddAnimations(Character: Model, Animal: string)
 	Animate.Enabled = true
 end
 
+function CharacterManager.Respawn(Player, Animal)
+	local Character: Model = ServerStorage:FindFirstChild(Animal):Clone()
+
+	local s, e = pcall(function()
+		Player.Character = Character
+	end)
+
+	if not s then
+		Character:Destroy()
+		return
+	end
+
+	CharacterManager.Spawn(Character)
+end
+
 function CharacterManager.Died(StateMachine, _Character: Model, Animal)
 	local Player: Player = StateMachine:Get("Player")
 	local Humanoid: Humanoid = _Character:WaitForChild("Humanoid")
 
 	local Connection
+	local Connection2
+
+	Connection2 = _Character.ChildRemoved:Connect(function()
+		if _Character.PrimaryPart == nil then
+			CharacterManager.Respawn(Player, Animal)
+
+			Connection:Disconnect()
+			Connection2:Disconnect()
+		end
+	end)
 
 	Connection = Humanoid.Died:Connect(function()
-		task.delay(3, function()
-			local Character: Model = ServerStorage:FindFirstChild(Animal):Clone()
+		task.delay(1.5, function()
+			CharacterManager.Respawn(Player, Animal)
 
-			local s, e = pcall(function()
-				Player.Character = Character
-			end)
-
-			if not s then
-				Character:Destroy()
-				Connection:Disconnect()
-
-				return
-			end
-
-			CharacterManager.Spawn(Character)
+			Connection2:Disconnect()
 			Connection:Disconnect()
 		end)
 	end)
