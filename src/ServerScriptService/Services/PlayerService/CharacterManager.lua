@@ -40,12 +40,17 @@ local ServerStorage = game:GetService("ServerStorage")
 
 --// Modules
 local Animations = require(script.Parent.Animations)
+local Knit = require(ReplicatedStorage.Packages.Knit)
+
+--// KnitServices
 
 --// Module
 local CharacterManager = {}
 
 --// Variables
 local Spawns = workspace:FindFirstChild("Spawns") or warn("No 'Spawns' folder in workspace")
+local PlayerStates = Knit.PlayerStates
+
 -- local Animations = ReplicatedStorage.Animations
 
 local AnimationPrefix = "rbxassetid://"
@@ -64,10 +69,17 @@ function CharacterManager.GetAnimations(Animal, QueriedAnimation: string): Anima
 	end
 end
 
-function CharacterManager.Spawn(Model: Model)
-	local Spawn: SpawnLocation = Spawns:GetChildren()[math.random(1, #Spawns:GetChildren())]
-	Model:PivotTo(Spawn.CFrame * CFrame.new(0, 5.5, 0))
-	Model.Parent = workspace:WaitForChild("Players")
+function CharacterManager.Spawn(Player: Player, Model: Model, StateMachine)
+	local SpawnPointCFrames = StateMachine:Get("SpawnPointCFrames")
+
+	if SpawnPointCFrames and #SpawnPointCFrames > 0 then
+		Model:PivotTo(SpawnPointCFrames[math.random(1, #SpawnPointCFrames)] * CFrame.new(0, 5.5, 0))
+		Model.Parent = workspace:WaitForChild("Players")
+	else
+		local Spawn: SpawnLocation = Spawns:GetChildren()[math.random(1, #Spawns:GetChildren())]
+		Model:PivotTo(Spawn.CFrame * CFrame.new(0, 5.5, 0))
+		Model.Parent = workspace:WaitForChild("Players")
+	end
 end
 
 function CharacterManager.AddAnimations(Character: Model, Animal: string)
@@ -103,7 +115,7 @@ function CharacterManager.AddAnimations(Character: Model, Animal: string)
 	Animate.Enabled = true
 end
 
-function CharacterManager.Respawn(Player, Animal)
+function CharacterManager.Respawn(Player, Animal, StateMachine)
 	local Character: Model = ServerStorage:FindFirstChild(Animal):Clone()
 
 	local s, e = pcall(function()
@@ -115,7 +127,7 @@ function CharacterManager.Respawn(Player, Animal)
 		return
 	end
 
-	CharacterManager.Spawn(Character)
+	CharacterManager.Spawn(Player, Character, StateMachine)
 end
 
 function CharacterManager.Died(StateMachine, _Character: Model, Animal)
@@ -127,7 +139,7 @@ function CharacterManager.Died(StateMachine, _Character: Model, Animal)
 
 	Connection2 = _Character.ChildRemoved:Connect(function()
 		if _Character.PrimaryPart == nil then
-			CharacterManager.Respawn(Player, Animal)
+			CharacterManager.Respawn(Player, Animal, StateMachine)
 
 			Connection:Disconnect()
 			Connection2:Disconnect()
@@ -136,7 +148,7 @@ function CharacterManager.Died(StateMachine, _Character: Model, Animal)
 
 	Connection = Humanoid.Died:Connect(function()
 		task.delay(1.5, function()
-			CharacterManager.Respawn(Player, Animal)
+			CharacterManager.Respawn(Player, Animal, StateMachine)
 
 			Connection2:Disconnect()
 			Connection:Disconnect()

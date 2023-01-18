@@ -18,6 +18,7 @@ local PlayerService = Knit.CreateService({
 	Client = {
 		Kill = Knit.CreateSignal(),
 		Spawned = Knit.CreateSignal(),
+		SetSpawnPoints = Knit.CreateSignal(),
 	},
 })
 
@@ -39,7 +40,9 @@ end
 
 local function DeleteBones(PrimaryPart: Part | MeshPart)
 	local RootBone: Bone = PrimaryPart:FindFirstChildOfClass("Bone")
-	RootBone:Destroy()
+	if RootBone then
+		RootBone:Destroy()
+	end
 end
 
 --// Knit Starting
@@ -88,6 +91,11 @@ function PlayerService:KnitStart()
 		-- PrimaryPart.Anchored = true
 
 		Humanoid:TakeDamage(Humanoid.MaxHealth)
+	end)
+
+	self.Client.SetSpawnPoints:Connect(function(Player: Player, SpawnPointCFrames: { CFrame })
+		local PlayerState = self:GetPlayerState(Player)
+		PlayerState:Set("SpawnPointCFrames", SpawnPointCFrames)
 	end)
 
 	self:AddState()
@@ -149,7 +157,7 @@ function PlayerService:ListenToState(Player: Player)
 		local Animal: Model = ServerStorage:FindFirstChild(NewAnimal):Clone()
 		Player.Character = Animal
 
-		CharacterManager.Spawn(Animal)
+		CharacterManager.Spawn(Player, Animal, StateMachine)
 	end)
 end
 

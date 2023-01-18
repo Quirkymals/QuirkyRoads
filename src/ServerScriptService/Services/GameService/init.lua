@@ -133,13 +133,15 @@ function GameService:ObservePlayer(Player: Player)
 	PlayerState:Set("Connections", Connections)
 	PlayerState:Set("Level", 1)
 
-	-- task.delay(10, function()
-	-- 	print('Level Change')
-	-- 	if self.Once then return end
+	task.delay(10, function()
+		print("Level Change")
+		if self.Once then
+			return
+		end
 
-	-- 	self.Once = true
-	-- 	PlayerState:Set("Level", 2)
-	-- end)
+		self.Once = true
+		PlayerState:Set("Level", 2)
+	end)
 end
 
 function GameService:ManageLevelOccupancy(Player: Player, CurrentLevel: number, PreviousLevel: number)

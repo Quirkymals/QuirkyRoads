@@ -85,11 +85,25 @@ function PlayerObserver.new()
 			CurrentLevelFolder:Destroy()
 		end
 		PlayerObserver.SpawnPlayer()
+		PlayerObserver.SetServerSpawnPoints(NextLevelFolder)
 	end)
 
 	PlayerState:GetChangedSignal("Character"):Connect(function(Character)
 		PlayerObserver.SpawnPlayer(Character)
 	end)
+end
+
+function PlayerObserver.SetServerSpawnPoints(LevelFolder)
+	local PlayerService = Knit.GetService("PlayerService")
+
+	local temp = {}
+	for _, SP: SpawnLocation in pairs(LevelFolder.Spawns:GetChildren()) do
+		table.insert(temp, SP.CFrame)
+	end
+
+	print(temp)
+
+	PlayerService.SetSpawnPoints:Fire(temp)
 end
 
 function PlayerObserver.ListenForCollisions(Character)
@@ -126,7 +140,7 @@ function PlayerObserver.Camera(Character: { PrimaryPart: MeshPart })
 	local Forward = math.clamp((GoalLocation.Position - SpawnLocation.Position).Magnitude, -1, 1)
 	local SpawnLocationCFrame = SpawnLocation.CFrame
 
-    Character:WaitForChild('HumanoidRootPart', 5)
+	Character:WaitForChild("HumanoidRootPart", 5)
 
 	CameraConnection = RunService.RenderStepped:Connect(function(deltaTime)
 		if not Character or not Character:FindFirstChild("HumanoidRootPart") then
@@ -149,12 +163,16 @@ function PlayerObserver.Camera(Character: { PrimaryPart: MeshPart })
 end
 
 function PlayerObserver.WalkOnLog(Character)
-    if Function then Function:Disconnect(); end
-    if Function2 then Function2:Disconnect(); end
+	if Function then
+		Function:Disconnect()
+	end
+	if Function2 then
+		Function2:Disconnect()
+	end
 
 	local LastLogCF
 
-    Character:WaitForChild('HumanoidRootPart', 5)
+	Character:WaitForChild("HumanoidRootPart", 5)
 
 	Function = RunService.RenderStepped:Connect(function()
 		--------------------------------------------------------------- CHECK PLATFORM BELOW
@@ -163,10 +181,14 @@ function PlayerObserver.WalkOnLog(Character)
 		local RootPart = Character.PrimaryPart
 
 		if not RootPart then
-			if Function then Function:Disconnect(); end
-            if Function2 then Function2:Disconnect(); end
+			if Function then
+				Function:Disconnect()
+			end
+			if Function2 then
+				Function2:Disconnect()
+			end
 
-            return 
+			return
 		end
 
 		local ray = Ray.new(RootPart.CFrame.p, Vector3.new(0, -50, 0))
