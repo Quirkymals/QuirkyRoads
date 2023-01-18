@@ -41,7 +41,7 @@ export type TimeRange = { Min: number, Max: number }
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
---// Modules
+--// Required Modules
 local LevelsInfo = require(ReplicatedStorage.Info.Levels)
 
 --// Variables
@@ -170,10 +170,8 @@ end
 function Level:Init()
 	self:GetAllMarkers()
 
-	local desiredInterval = 0.5 --fire every 2.5 seconds
-	local hitBoxInterval = 1 --fire every 2.5 seconds
+	local desiredInterval = 0.5 --fire every .5 seconds
 	local counter = 0
-	local hitBoxCounter = 0
 
 	self.Connections["Update"] = RunService.Heartbeat:Connect(function(step)
 		counter = counter + step
@@ -184,12 +182,7 @@ function Level:Init()
 	end)
 
 	-- self.Connections['UpdateHitBoxes'] = RunService.Heartbeat:Connect(function(step)
-	-- 	counter = counter + step
-	-- 	if counter >= desiredInterval then
-	-- 		counter = counter - desiredInterval
-	-- 		self:Update()
-	-- 	end
-	-- end)
+
 end
 
 function Level:Disconnect()

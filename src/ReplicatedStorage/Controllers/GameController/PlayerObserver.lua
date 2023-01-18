@@ -49,20 +49,23 @@ local Levels = ReplicatedStorage.Levels
 
 local CameraConnection: RBXScriptConnection
 
+local Function: RBXScriptConnection
+local Function2: RBXScriptConnection
+
 --// module
 local PlayerObserver = {}
 
-function PlayerObserver.SpawnPlayer()
+function PlayerObserver.SpawnPlayer(_Character: Model?)
 	local LevelFolder = PlayerState:Get("LevelMap")
-	local Character: Model = PlayerState:Get("Character")
+	local Character: Model = _Character or PlayerState:Get("Character")
 
 	local Spawns = LevelFolder.Spawns:GetChildren()
-
 	local RandomSpawn = Spawns[math.random(1, #Spawns)]
-
+    
 	Character:PivotTo(RandomSpawn.CFrame * CFrame.new(0, 5, 0))
 
-	PlayerObserver.Camera(Player.Character or Player.CharacterAdded:Wait())
+	PlayerObserver.Camera(Character)
+	PlayerObserver.WalkOnLog(Character)
 end
 
 function PlayerObserver.new()
@@ -70,20 +73,16 @@ function PlayerObserver.new()
 		local CurrentLevelFolder = PlayerState:Get("LevelMap")
 		local NextLevelFolder = Levels:FindFirstChild(CurrentLevel):Clone()
 
-		print("Test")
-
 		NextLevelFolder.Parent = workspace
 		PlayerState:Set("LevelMap", NextLevelFolder)
 
-		PlayerObserver.SpawnPlayer()
-
-		if CurrentLevelFolder then
-			CurrentLevelFolder:Destroy()
-		end
+        
+		if CurrentLevelFolder then CurrentLevelFolder:Destroy() end
+        PlayerObserver.SpawnPlayer()
 	end)
 
 	PlayerState:GetChangedSignal("Character"):Connect(function(Character)
-		PlayerObserver.SpawnPlayer()
+		PlayerObserver.SpawnPlayer(Character)
 	end)
 end
 
@@ -93,18 +92,17 @@ function PlayerObserver.Camera(Character: { PrimaryPart: MeshPart })
 	end
 
 	Camera = workspace.CurrentCamera
-	Camera.CameraType = Enum.CameraType.Scriptable
 
 	local Max = 20
+	local Distance = 10
+    
 	local LevelFolder: Folder = PlayerState:Get("LevelMap")
-
 	local GoalLocation: Part = LevelFolder.Goal:FindFirstChildOfClass("Part")
 	local SpawnLocation: SpawnLocation = LevelFolder.Spawns:FindFirstChildOfClass("SpawnLocation")
 
 	local Forward = math.clamp((GoalLocation.Position - SpawnLocation.Position).Magnitude, -1, 1)
 	local SpawnLocationCFrame = SpawnLocation.CFrame
 
-	local Distance = 10
 
 	CameraConnection = RunService.RenderStepped:Connect(function(deltaTime)
 		Camera.CameraType = Enum.CameraType.Scriptable
@@ -113,18 +111,54 @@ function PlayerObserver.Camera(Character: { PrimaryPart: MeshPart })
 		local CharXPos = CharacterPosition.X
 
 		local OriginX = math.clamp(CharXPos, CharXPos - Max, CharXPos + Max)
-
-		local Origin =
-			CFrame.new(OriginX + (-Forward * Distance), SpawnLocationCFrame.Y + Distance, CharacterPosition.Z)
-
-		-- local LookAt = CFrame.new(
-		--     OriginX,
-		-- )
+		local Origin = CFrame.new(OriginX + (-Forward * Distance), SpawnLocationCFrame.Y + Distance, CharacterPosition.Z)
 
 		local Desired: CFrame = CFrame.new(Origin.Position, CharacterPosition)
 
 		Camera.CFrame = Camera.CFrame:Lerp(Desired, 0.1)
 	end)
+end
+
+function PlayerObserver.WalkOnLog(Character)
+    local LastLogCF
+
+    
+    
+    Function = RunService.RenderStepped:Connect(function()
+        --------------------------------------------------------------- CHECK PLATFORM BELOW
+
+        local Ignore = Character
+        local RootPart = Character.PrimaryPart
+
+
+        local ray = Ray.new(RootPart.CFrame.p,Vector3.new(0,-50,0))
+        local Hit, Position, Normal, Material = workspace:FindPartOnRay(ray,Ignore)
+
+        if Hit and Hit.Name == "Log" then 
+
+            local Log = Hit
+
+            if LastLogCF == nil then 
+                LastLogCF = Log.CFrame
+            end
+
+            local LogCF = Log.CFrame 
+            local Rel = LogCF * LastLogCF:Inverse()
+            RootPart.CFrame = Rel * RootPart.CFrame
+
+
+            LastLogCF = Log.CFrame
+        else
+            LastLogCF = nil
+
+        end
+
+        Function2 = Character.Humanoid.Died:Connect(function()
+            Function:Disconnect()
+            Function2:Disconnect()
+        end)
+
+    end)
 end
 
 return PlayerObserver
