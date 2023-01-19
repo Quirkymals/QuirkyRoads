@@ -3,7 +3,6 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 --// Modules
-local Level = require(script.Level)
 local Obstacle = require(script.Obstacle)
 local PlayerObserver = require(script.PlayerObserver)
 
