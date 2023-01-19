@@ -68,7 +68,7 @@ function PlayerObserver.SpawnPlayer(_Character: Model?)
 
 	Character:PivotTo(RandomSpawn.CFrame * CFrame.new(0, 5, 0))
 
-	PlayerObserver.Camera(Character)
+	-- PlayerObserver.Camera(Character)
 	PlayerObserver.WalkOnLog(Character)
 	PlayerObserver.ListenForCollisions(Character)
 end
@@ -107,6 +107,7 @@ end
 function PlayerObserver.ListenForCollisions(Character)
 	local Collision, Death
 
+	local GameService = Knit.GetService("GameService")
 	local PlayerService = Knit.GetService("PlayerService")
 
 	local PrimaryPart: MeshPart = Character:WaitForChild("HumanoidRootPart")
@@ -117,6 +118,8 @@ function PlayerObserver.ListenForCollisions(Character)
 			CollisionSFX[math.random(1, #CollisionSFX)]:Play()
 			PlayerService.Kill:Fire()
 			Collision:Disconnect()
+		elseif CollectionService:HasTag(otherPart, "Goal") then
+			GameService.ChangeLevel:Fire()
 		end
 	end)
 end

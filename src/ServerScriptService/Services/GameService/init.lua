@@ -42,6 +42,10 @@ function GameService:KnitStart()
 
 	-------------Classes-------------
 	-----------Initialize------------
+	self.Client.ChangeLevel:Connect(function(Player)
+		self:IncrementPlayerLevel(Player)
+	end)
+
 	Players.PlayerAdded:Connect(function(Player)
 		self:ObservePlayer(Player)
 	end)
@@ -114,6 +118,11 @@ function GameService:UpdateLevels(...)
 	end
 end
 
+function GameService:IncrementPlayerLevel(Player)
+	local PlayerState = self.PlayerService:GetPlayerState(Player)
+	PlayerState:Set("Level", PlayerState:Get("Level") + 1)
+end
+
 function GameService:ObservePlayer(Player: Player)
 	if self.ObservedPlayers[Player] then
 		return
@@ -133,15 +142,15 @@ function GameService:ObservePlayer(Player: Player)
 	PlayerState:Set("Connections", Connections)
 	PlayerState:Set("Level", 1)
 
-	task.delay(10, function()
-		print("Level Change")
-		if self.Once then
-			return
-		end
+	-- task.delay(5, function()
+	-- 	print("Level Change")
+	-- 	if self.Once then
+	-- 		return
+	-- 	end
 
-		self.Once = true
-		PlayerState:Set("Level", 2)
-	end)
+	-- 	self.Once = true
+	-- 	PlayerState:Set("Level", 2)
+	-- end)
 end
 
 function GameService:ManageLevelOccupancy(Player: Player, CurrentLevel: number, PreviousLevel: number)

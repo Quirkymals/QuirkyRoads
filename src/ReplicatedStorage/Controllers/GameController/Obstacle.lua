@@ -66,8 +66,8 @@ function Obstacle.new(CurrentLevelFolderName, SetName, MarkerName, ObstacleName:
 end
 
 function Obstacle.GetCFrame(ObstacleInstance: MeshPart, Marker: Part)
-	local OffSet = ObstacleInstance.Name:lower():find("log") and 0 or ObstacleInstance.Size.Y / 2 - Marker.Size.Y / 2
-
+	local OffSet = ObstacleInstance.Name:lower():find("log") and -ObstacleInstance.Size.Y / 2
+		or ObstacleInstance.Size.Y / 2 - Marker.Size.Y / 2
 	return Marker.CFrame * CFrame.new(0, OffSet, 0) * CFrame.fromEulerAnglesXYZ(0, -math.pi / 2, 0)
 end
 
