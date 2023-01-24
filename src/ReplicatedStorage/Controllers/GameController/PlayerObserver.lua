@@ -120,6 +120,7 @@ function PlayerObserver.ListenForCollisions(Character)
 			Collision:Disconnect()
 		elseif CollectionService:HasTag(otherPart, "Goal") then
 			GameService.ChangeLevel:Fire()
+			Collision:Disconnect()
 		end
 	end)
 end

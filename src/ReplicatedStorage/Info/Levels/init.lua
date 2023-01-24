@@ -2,15 +2,15 @@ return {
 	{
 		TimeRanges = {
 			Logs = {
-				Min = 5,
-				Max = 7,
+				Min = 8,
+				Max = 10,
 			},
 			Trains = {
 				Min = 2,
 				Max = 3,
 			},
 			Vehicles = {
-				Min = 3,
+				Min = 4,
 				Max = 6,
 			},
 		},
@@ -25,8 +25,8 @@ return {
 	{
 		TimeRanges = {
 			Logs = {
-				Min = 5,
-				Max = 7,
+				Min = 8,
+				Max = 10,
 			},
 			Trains = {
 				Min = 2,
