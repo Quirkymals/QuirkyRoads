@@ -59,7 +59,10 @@ function ServerPlayerState.new(Player: Player)
 		Animal = "",
 		Animations = "",
 
+		Level = 0,
+
 		Connections = {},
+		SpawnPointCFrames = {},
 	})
 
 	function PlayerState:Disconnect()

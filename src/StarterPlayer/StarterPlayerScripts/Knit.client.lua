@@ -36,7 +36,6 @@ local function AddState(StateModule: ModuleScript | Folder)
 end
 
 AddState(States)
-print(Knit)
 
 --// Adding Conrollers
 Knit.AddControllersDeep(ReplicatedStorage.Controllers)
